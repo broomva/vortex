@@ -156,7 +156,7 @@ setup(
         "selenium",
         "html2text",
         "chainlit",
-        "faiss",
+        "faiss-cpu",
         "chromadb",
         "tiktoken",
         "pymupdf",
