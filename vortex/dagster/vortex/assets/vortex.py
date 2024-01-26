@@ -4,8 +4,16 @@ import json
 import os
 from typing import Tuple
 
-from dagster import (AssetExecutionContext, AssetOut, MetadataValue, Out,
-                     Output, asset, multi_asset, op)
+from dagster import (
+    AssetExecutionContext,
+    AssetOut,
+    MetadataValue,
+    Out,
+    Output,
+    asset,
+    multi_asset,
+    op,
+)
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
