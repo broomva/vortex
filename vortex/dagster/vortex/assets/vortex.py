@@ -224,7 +224,7 @@ def write_consolidated_summary(context, consolidated_summary, get_articles_summa
 def send_email_with_sendgrid(context, get_url, summarize_article):
     email = get_url[2]
     message = Mail(
-        from_email="Vortex Summaries",
+        from_email="carlos@broomva.tech",
         to_emails=email,
         subject="Here is your URL summary! 🎉",
         plain_text_content=summarize_article,
