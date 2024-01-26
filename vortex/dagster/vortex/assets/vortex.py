@@ -73,9 +73,15 @@ def get_article(context, get_url) -> str:
     if not get_url:
         return None
     try:
-        response = scrape_website_selenium(get_url[0])
+        try:
+            response = scrape_website_selenium(get_url[0])
+            context.log.debug(f"Selenium response {response}")
+        except Exception as e:
+            response = None
         if response is None:
+            context.log.warning(f"Selenium response was None. Using BS4")
             response = scrape_website(get_url[0])
+            context.log.debug(f"Bs4 Scrape response {response}")
     except Exception as e:
         context.log.info(f"Error {e}")
         response = None
@@ -218,7 +224,7 @@ def write_consolidated_summary(context, consolidated_summary, get_articles_summa
 def send_email_with_sendgrid(context, get_url, summarize_article):
     email = get_url[2]
     message = Mail(
-        from_email="carlos@broomva.tech",
+        from_email="Vortex Summaries",
         to_emails=email,
         subject="Here is your URL summary! 🎉",
         plain_text_content=summarize_article,

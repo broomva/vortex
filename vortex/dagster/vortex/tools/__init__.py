@@ -61,28 +61,32 @@ def scrape_website(url: str):
 
 
 def scrape_website_selenium(url):
-    # Configure Selenium with a headless browser
-    options = Options()
-    options.headless = True
-    driver = webdriver.Chrome(options=options)
+    try:
+        # Configure Selenium with a headless browser
+        options = Options()
+        options.headless = True
+        driver = webdriver.Chrome(options=options)
 
-    # Access the webpage
-    driver.get(url)
+        # Access the webpage
+        driver.get(url)
 
-    # Wait for JavaScript to render. Adjust time as needed.
-    time.sleep(5)  # Time in seconds
+        # Wait for JavaScript to render. Adjust time as needed.
+        time.sleep(5)  # Time in seconds
 
-    # Extract the page source
-    page_source = driver.page_source
+        # Extract the page source
+        page_source = driver.page_source
 
-    # Close the browser
-    driver.quit()
+        # Close the browser
+        driver.quit()
 
-    # Convert HTML to Markdown
-    converter = html2text.HTML2Text()
-    markdown = converter.handle(page_source)
+        # Convert HTML to Markdown
+        converter = html2text.HTML2Text()
+        markdown = converter.handle(page_source)
 
-    return markdown
+        return markdown
+    except Exception as e:
+        print(f"Error scraping website: {e}")
+        raise e
 
 
 tools = [

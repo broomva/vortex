@@ -5,6 +5,9 @@ __pycache__/
 
 .streamlit/secrets.toml
 
+
+dagster_runtime/
+
 # C extensions
 *.so
 
