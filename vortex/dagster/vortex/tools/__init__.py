@@ -54,7 +54,7 @@ def scrape_website(url: str):
     # Check the response status code
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, "html.parser")
-        text = soup  # soup.get_text()
+        text = soup.get_text()
         return text
     else:
         print(f"HTTP request failed with status code {response.status_code}")
