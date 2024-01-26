@@ -19,6 +19,6 @@ faiss-cpu==1.7.4
 chromadb==0.4.22
 tiktoken==0.5.2
 pymupdf==1.23.19
-duckduckgo-searc== 4.2
+duckduckgo-search==4.2
 wikipedia==1.4.0
 mlflow==2.4.1
