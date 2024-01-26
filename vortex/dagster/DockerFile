@@ -4,11 +4,9 @@ RUN mkdir -p /opt/dagster/dagster_home /opt/dagster/app
 
 COPY vortex/dagster /opt/dagster/app/
 
-COPY ../../pyproject.toml /opt/dagster/app/
+COPY ../../requirements.txt /opt/dagster/app/
 
-RUN pip install poetry
-
-RUN poetry install
+RUN pip install -r requirements.txt
 
 ENV DAGSTER_HOME=/opt/dagster/dagster_home/
 
