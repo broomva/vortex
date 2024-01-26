@@ -7,7 +7,7 @@ from .. import resources
 load_dotenv()
 
 
-@sensor(job_name="vortex_dag", minimum_interval_seconds=60)
+@sensor(job_name="vortex_dag", minimum_interval_seconds=420)
 def new_row_sensor(
     postgres_resource: resources.PostgresResource, context: OpExecutionContext
 ):
