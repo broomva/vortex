@@ -160,7 +160,7 @@ setup(
         "chromadb",
         "tiktoken",
         "pymupdf",
-        "duckduckgo",
+        # "duckduckgo",
         "wikipedia",
         "sendgrid",
     ],
