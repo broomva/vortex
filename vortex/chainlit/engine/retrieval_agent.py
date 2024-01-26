@@ -6,6 +6,7 @@ from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.utilities import WikipediaAPIWrapper
+
 # from langchain.chat_models import ChatOpenAI
 from langchain_openai import ChatOpenAI
 
@@ -47,8 +48,7 @@ async def init():
             ),
         ]
     ).send()
-    
-        
+
     # Web Search Tool
     search_tool = Tool(
         name="Web Search",
@@ -100,12 +100,12 @@ async def init():
         '''
         """,
     )
-    
+
     llm = ChatOpenAI(
-            temperature=settings["temperature"],
-            streaming=settings["streaming"],
-            model=settings["model"],
-        )
+        temperature=settings["temperature"],
+        streaming=settings["streaming"],
+        model=settings["model"],
+    )
 
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
@@ -122,7 +122,7 @@ async def init():
         agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
         tools=[search_tool, wikipedia_tool],
         llm=llm,
-        verbose=True, # verbose option is for printing logs (only for development)
+        verbose=True,  # verbose option is for printing logs (only for development)
         max_iterations=3,
         prompt=prompt,
         memory=memory,
@@ -140,12 +140,12 @@ async def main(message: str):
     agent = cl.user_session.get("agent")
 
     # Call the chain asynchronously
-    plan_result = await plan_chain.acall(message, callbacks=[cl.AsyncLangchainCallbackHandler()])
+    plan_result = await plan_chain.acall(
+        message, callbacks=[cl.AsyncLangchainCallbackHandler()]
+    )
 
     # Agent execution
     res = await agent(plan_result)
 
     # Send the response
     cl.Message(content=res["output"]).send()
-
-

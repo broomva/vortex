@@ -2,19 +2,21 @@ from typing import Dict, Optional
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider, Switch
-from langchain.chains import (ConversationalRetrievalChain,
-                              RetrievalQAWithSourcesChain)
+from langchain.chains import ConversationalRetrievalChain, RetrievalQAWithSourcesChain
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
+
 # from langchain.chat_models import ChatOpenAI
 # from langchain_community.chat_models import ChatOpenAI
 from langchain_openai import ChatOpenAI
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 embeddings = OpenAIEmbeddings()
-vector_store = FAISS.load_local("/Users/broomva/GitHub/vortex/vortex/chainlit/docs.faiss", embeddings)
+vector_store = FAISS.load_local(
+    "/Users/broomva/GitHub/vortex/vortex/chainlit/docs.faiss", embeddings
+)
 
 # @cl.oauth_callback
 # def oauth_callback(
@@ -91,6 +93,7 @@ async def setup_agent(settings):
     print("on_settings_update", settings)
     get_chain()
 
+
 def get_chain():
     settings = cl.user_session.get("settings")
     # chat_profile = cl.user_session.get("chat_profile")
@@ -99,7 +102,7 @@ def get_chain():
     #     settings["model"] = "gpt-3.5-turbo"
     # elif chat_profile == "GPT4 Agent":
     #     settings["model"] = "gpt-4-1106-preview"
-    
+
     message_history = ChatMessageHistory()
 
     memory = ConversationBufferMemory(
@@ -121,9 +124,10 @@ def get_chain():
         memory=memory,
         return_source_documents=True,
     )
-    
+
     cl.user_session.set("chain", chain)
     return chain
+
 
 @cl.on_chat_start
 async def init():
@@ -159,20 +163,21 @@ async def init():
             ),
         ]
     ).send()
-    
+
     cl.user_session.set("settings", settings)
 
     get_chain()
+
 
 def format_url(input_string):
     # Remove the leading '../../../'
     modified_string = input_string[9:]
 
     # Replace '.md' with an empty string
-    modified_string = modified_string.replace('.md', '')
+    modified_string = modified_string.replace(".md", "")
 
     # Prepend the base URL
-    formatted_url = f'http://localhost:3000/{modified_string}'
+    formatted_url = f"http://localhost:3000/{modified_string}"
 
     return formatted_url
 
@@ -188,7 +193,7 @@ async def main(message):
     res = await chain.acall(message.content, callbacks=[cb])
 
     answer = res["answer"]
-    
+
     source_documents = res["source_documents"]  # type: List[Document]
 
     text_elements = []  # type: List[cl.Text]
@@ -197,14 +202,12 @@ async def main(message):
         for source_idx, source_doc in enumerate(source_documents):
             source_name = f"Ref. {source_idx}"
             # Create the text element referenced in the message
-            
+
             text_content = f"""{format_url(source_doc.metadata['source'])} \n
             {source_doc.page_content}
             """
-            
-            text_elements.append(
-                cl.Text(content=text_content, name=source_name)
-            )
+
+            text_elements.append(cl.Text(content=text_content, name=source_name))
         source_names = [text_el.name for text_el in text_elements]
 
         if source_names:

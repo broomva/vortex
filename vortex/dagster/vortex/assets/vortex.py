@@ -3,8 +3,16 @@
 import json
 from typing import Tuple
 
-from dagster import (AssetExecutionContext, AssetOut, MetadataValue, Out,
-                     Output, asset, multi_asset, op)
+from dagster import (
+    AssetExecutionContext,
+    AssetOut,
+    MetadataValue,
+    Out,
+    Output,
+    asset,
+    multi_asset,
+    op,
+)
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
@@ -18,7 +26,7 @@ from ..tools import scrape_website, tools
     group_name="gather_articles",
     required_resource_keys={"postgres_resource"},
 )
-def get_url(context: AssetExecutionContext): # -> Tuple[str, int, str]:
+def get_url(context: AssetExecutionContext):  # -> Tuple[str, int, str]:
     postgres_resource = context.resources.postgres_resource
     response = postgres_resource.run_query(
         """
@@ -43,12 +51,20 @@ def get_url(context: AssetExecutionContext): # -> Tuple[str, int, str]:
         article_id = None
         email = None
     context.log.info(f"Got url {url}")
-    context.add_output_metadata(metadata={"url": MetadataValue.url(url),})
+    context.add_output_metadata(
+        metadata={
+            "url": MetadataValue.url(url),
+        }
+    )
     if not url:
         raise Exception("No url found")
     return url, article_id, email
 
-@asset(group_name="gather_articles", required_resource_keys={"openai_resource"},)
+
+@asset(
+    group_name="gather_articles",
+    required_resource_keys={"openai_resource"},
+)
 def get_article(context, get_url) -> str:
     context.log.info(f"Running get_article with {get_url[0]}")
     if not get_url:
@@ -59,22 +75,39 @@ def get_article(context, get_url) -> str:
         context.log.info(f"Error {e}")
         response = None
     context.log.info(f"Got response {response}")
-    context.add_output_metadata(metadata={"response": MetadataValue.md(response),})
+    context.add_output_metadata(
+        metadata={
+            "response": MetadataValue.md(response),
+        }
+    )
     return response
 
-@asset(group_name="gather_articles", required_resource_keys={"openai_resource"},)
+
+@asset(
+    group_name="gather_articles",
+    required_resource_keys={"openai_resource"},
+)
 def summarize_article(context: AssetExecutionContext, get_article: str) -> str:
     openai_resource = context.resources.openai_resource
     if not get_article:
         return None
     user_query = f"Please generate a new fresh article of similar length based on this information: {get_article}"
     response = openai_resource.get_completion(user_query)
-    context.add_output_metadata(metadata={"response": MetadataValue.md(response),})
+    context.add_output_metadata(
+        metadata={
+            "response": MetadataValue.md(response),
+        }
+    )
     return response
 
 
-@asset(group_name="gather_articles", required_resource_keys={"postgres_resource"},)
-def update_articles_table_with_summary(context, summarize_article, get_article, get_url):
+@asset(
+    group_name="gather_articles",
+    required_resource_keys={"postgres_resource"},
+)
+def update_articles_table_with_summary(
+    context, summarize_article, get_article, get_url
+):
     postgres_resource = context.resources.postgres_resource
     query = f"""
         INSERT INTO public.processed_articles (article_id, url, content, summary, created_at, reprocess)
@@ -87,13 +120,23 @@ def update_articles_table_with_summary(context, summarize_article, get_article, 
             created_at = EXCLUDED.created_at,
             reprocess = EXCLUDED.reprocess
     """
-    response = postgres_resource.run_query(query, (get_url[1], get_url[0], get_article, summarize_article))
+    response = postgres_resource.run_query(
+        query, (get_url[1], get_url[0], get_article, summarize_article)
+    )
     context.log.info(f"Running write_summary with {query}")
-    context.add_output_metadata(metadata={"response": MetadataValue.md(response),})
+    context.add_output_metadata(
+        metadata={
+            "response": MetadataValue.md(response),
+        }
+    )
     return response
 
 
-@asset(deps=[update_articles_table_with_summary], group_name="articles_sumarization",required_resource_keys={"postgres_resource"},)
+@asset(
+    deps=[update_articles_table_with_summary],
+    group_name="articles_sumarization",
+    required_resource_keys={"postgres_resource"},
+)
 def get_articles_summaries(context: AssetExecutionContext):
     postgres_resource = context.resources.postgres_resource
     response = postgres_resource.run_query(
@@ -108,22 +151,36 @@ def get_articles_summaries(context: AssetExecutionContext):
             urls.append(i[1])
             articles.append(i[2])
     context.log.info(f"Got articles {summaries}")
-    context.add_output_metadata(metadata={"articles": MetadataValue.md(str(summaries)),})
+    context.add_output_metadata(
+        metadata={
+            "articles": MetadataValue.md(str(summaries)),
+        }
+    )
     return summaries, urls, articles
 
 
-@asset(group_name="articles_sumarization",required_resource_keys={"openai_resource"},)
+@asset(
+    group_name="articles_sumarization",
+    required_resource_keys={"openai_resource"},
+)
 def consolidated_summary(context: AssetExecutionContext, get_articles_summaries):
     openai_resource = context.resources.openai_resource
     user_query = f"Please generate a new fresh article summarizing based on these articles, separate each article and include sources: {get_articles_summaries}"
     context.log.info(f"Summarizing {user_query}")
     response = openai_resource.get_completion(user_query)
     context.log.info(f"Got response {response}")
-    context.add_output_metadata(metadata={"response": MetadataValue.md(str(response)),})
+    context.add_output_metadata(
+        metadata={
+            "response": MetadataValue.md(str(response)),
+        }
+    )
     return response
 
 
-@asset(group_name="articles_sumarization", required_resource_keys={"postgres_resource"},)
+@asset(
+    group_name="articles_sumarization",
+    required_resource_keys={"postgres_resource"},
+)
 def write_consolidated_summary(context, consolidated_summary, get_articles_summaries):
     postgres_resource = context.resources.postgres_resource
     urls = get_articles_summaries[1]
@@ -138,7 +195,12 @@ def write_consolidated_summary(context, consolidated_summary, get_articles_summa
     """
     context.log.info(f"Running write_consolidated_summary with {query}")
     response = postgres_resource.run_query(query, (consolidated_summary, urls))
-    context.add_output_metadata(metadata={"response": MetadataValue.md(str(response)),})
+    context.add_output_metadata(
+        metadata={
+            "response": MetadataValue.md(str(response)),
+        }
+    )
     return response
-# %%
 
+
+# %%

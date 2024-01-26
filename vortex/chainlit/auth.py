@@ -43,7 +43,12 @@ def auth_callback(
         "broomva",
         "b68cacbadaee450b8a8ce2dd44842f1de03ee9993ad97b5e99dea64ef93960ba",
     ):
-        return cl.AppUser(username="Broomva", role="OWNER", provider="credentials", tags = ["admin_user"])
+        return cl.AppUser(
+            username="Broomva",
+            role="OWNER",
+            provider="credentials",
+            tags=["admin_user"],
+        )
     elif (username, password) == ("guest", "guest"):
         return cl.AppUser(username="Guest", role="USER", provider="credentials")
     else:

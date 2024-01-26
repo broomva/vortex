@@ -2,19 +2,21 @@ from typing import Dict, Optional
 
 import chainlit as cl
 from chainlit.input_widget import Select, Slider, Switch
-from langchain.chains import (ConversationalRetrievalChain,
-                              RetrievalQAWithSourcesChain)
+from langchain.chains import ConversationalRetrievalChain, RetrievalQAWithSourcesChain
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ChatMessageHistory, ConversationBufferMemory
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import FAISS
+
 # from langchain.chat_models import ChatOpenAI
 # from langchain_community.chat_models import ChatOpenAI
 from langchain_openai import ChatOpenAI
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 embeddings = OpenAIEmbeddings()
-vector_store = FAISS.load_local("/Users/broomva/GitHub/vortex/vortex/chainlit/docs.faiss", embeddings)
+vector_store = FAISS.load_local(
+    "/Users/broomva/GitHub/vortex/vortex/chainlit/docs.faiss", embeddings
+)
 
 
 @cl.on_chat_start

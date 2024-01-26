@@ -14,7 +14,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 brwoserless_api_key = os.getenv("BROWSERLESS_API_KEY")
-serper_api_key = os.getenv("SERP_API_KEY") 
+serper_api_key = os.getenv("SERP_API_KEY")
+
 
 def search(query):
     url = "https://google.serper.dev/search"
@@ -24,6 +25,7 @@ def search(query):
     response = requests.request("POST", url, headers=headers, data=payload)
     print(response.text)
     return response.text
+
 
 # def scrape_website(url: str):
 #     # scrape website, and also will summarize the content based on objective if the content is too large
@@ -66,7 +68,7 @@ def scrape_website(url):
 
     # Access the webpage
     driver.get(url)
-    
+
     # Wait for JavaScript to render. Adjust time as needed.
     time.sleep(5)  # Time in seconds
 
@@ -97,4 +99,3 @@ tools = [
     # ScrapeWebsiteTool(),
 ]
 # %%
-

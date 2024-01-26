@@ -1,4 +1,4 @@
-#%%
+# %%
 import os
 from typing import Optional
 
@@ -21,7 +21,9 @@ class OpenAIResource(ConfigurableResource):
     )
     base_url: Optional[str] = os.getenv("OPENAI_API_BASE_URL")
     # client: Optional[OpenAI] = None
-    model: Optional[str] = os.getenv("OPENAI_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
+    model: Optional[str] = (
+        os.getenv("OPENAI_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
+    )
     # respone_model: Optional[BaseModel] = None
     temperature: Optional[float] = 0.8
     max_tokens: Optional[int] = 8096
@@ -32,15 +34,13 @@ class OpenAIResource(ConfigurableResource):
         }
     ]
     user_content: Optional[str] = None
-    
+
     def get_completion(self, user_content):
         client = OpenAI(
             api_key=self.api_key,
             base_url=self.base_url,
         )
-        self.messages.append(
-            {"role": "user", "content": user_content}
-        )
+        self.messages.append({"role": "user", "content": user_content})
         response = client.chat.completions.create(
             model=self.model,
             messages=self.messages,
@@ -50,7 +50,6 @@ class OpenAIResource(ConfigurableResource):
         )
         return response.choices[0].message.content
 
-        
     def get_agent_response(self, user_content: str):
         # Get the prompt to use - you can modify this!
         prompt = hub.pull("hwchase17/openai-tools-agent")
@@ -64,16 +63,14 @@ class OpenAIResource(ConfigurableResource):
         agent = create_openai_tools_agent(llm, tools, prompt)
         # Create an agent executor by passing in the agent and tools
         agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-        user_input = {
-            "input": user_content
-        }
+        user_input = {"input": user_content}
         response = agent_executor.invoke(user_input)
         return response["output"]
 
 
 class SQLAlchemyResource(ConfigurableResource):
     url: Optional[str] = os.getenv("SQLALCHEMY_URL")
-    
+
     def run_query(self, query, params=None):
         engine = create_engine(self.url)
         with engine.connect() as connection:
@@ -84,7 +81,7 @@ class SQLAlchemyResource(ConfigurableResource):
                 rows = result.fetchall()  # For SELECT queries
             except Exception as e:
                 # print(f"An error occurred: {e}")
-                rows = result.rowcount or None # For INSERT, UPDATE, DELETE queries
+                rows = result.rowcount or None  # For INSERT, UPDATE, DELETE queries
             return rows
 
 
@@ -104,7 +101,7 @@ class PostgresResource(ConfigurableResource):
             password=self.password,
             host=self.host,
             port=self.port,
-            options="-c client_encoding=utf8"
+            options="-c client_encoding=utf8",
         )
         cursor = conn.cursor()
         cursor.execute(query, params)
@@ -118,5 +115,6 @@ class PostgresResource(ConfigurableResource):
         cursor.close()
         conn.close()
         return rows
+
 
 # %%
