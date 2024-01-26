@@ -1,0 +1,9 @@
+langchain
+chainlit
+openai
+faiss-cpu
+chromadb
+tiktoken
+pymupdf
+duckduckgo-search
+wikipedia

@@ -1,0 +1,4 @@
+locations:
+- code_source:
+    package_name: vortex
+  location_name: vortex
