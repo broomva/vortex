@@ -95,7 +95,7 @@ tools = [
         name="Scrape Website",
         func=scrape_website,
         description="useful when you need to get data from a website url; DO NOT make up any url, the url should only be from the search results",
-    )
+    ),
     # ScrapeWebsiteTool(),
 ]
 # %%
