@@ -64,7 +64,7 @@ jobs:
       run: |
         black .
         black --diff --check $(git ls-files '*.py')
-        pylint --disable=all --enable=unused-import $(git ls-files '*.py')
+
     - name: Commit and push changes
       run: |
         git config --local user.email "actions@github.com"
@@ -104,3 +104,5 @@ jobs:
   #       with:
   #         release-type: node
   #         package-name: release-please-action
+  
+  # pylint --disable=all --enable=unused-import $(git ls-files '*.py')
