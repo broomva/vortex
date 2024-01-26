@@ -3,10 +3,11 @@ from chainlit.input_widget import Select, Slider, Switch
 from langchain.agents import AgentType, Tool, initialize_agent
 from langchain.chains import ConversationChain
 from langchain.chains.conversation.memory import ConversationBufferMemory
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.tools import DuckDuckGoSearchRun
 from langchain.utilities import WikipediaAPIWrapper
+# from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 search = DuckDuckGoSearchRun()
 wikipedia = WikipediaAPIWrapper()
