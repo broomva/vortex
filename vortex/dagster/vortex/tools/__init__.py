@@ -27,40 +27,40 @@ def search(query):
     return response.text
 
 
-# def scrape_website(url: str):
-#     # scrape website, and also will summarize the content based on objective if the content is too large
-#     # objective is the original objective & task that user give to the agent, url is the url of the website to be scraped
+def scrape_website(url: str):
+    # scrape website, and also will summarize the content based on objective if the content is too large
+    # objective is the original objective & task that user give to the agent, url is the url of the website to be scraped
 
-#     print("Scraping website...")
-#     # Define the headers for the request
-#     headers = {
-#         "Cache-Control": "no-cache",
-#         "Content-Type": "application/json",
-#     }
+    print("Scraping website...")
+    # Define the headers for the request
+    headers = {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/json",
+    }
 
-#     # Define the data to be sent in the request
-#     data = {"url": url}
+    # Define the data to be sent in the request
+    data = {"url": url}
 
-#     # Convert Python object to JSON string
-#     data_json = json.dumps(data)
+    # Convert Python object to JSON string
+    data_json = json.dumps(data)
 
-#     # Send the POST request
-#     response = requests.post(
-#         f"https://chrome.browserless.io/content?token={brwoserless_api_key}",
-#         headers=headers,
-#         data=data_json,
-#     )
+    # Send the POST request
+    response = requests.post(
+        f"https://chrome.browserless.io/content?token={brwoserless_api_key}",
+        headers=headers,
+        data=data_json,
+    )
 
-#     # Check the response status code
-#     if response.status_code == 200:
-#         soup = BeautifulSoup(response.content, "html.parser")
-#         text = soup #soup.get_text()
-#         return text
-#     else:
-#         print(f"HTTP request failed with status code {response.status_code}")
+    # Check the response status code
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, "html.parser")
+        text = soup #soup.get_text()
+        return text
+    else:
+        print(f"HTTP request failed with status code {response.status_code}")
 
 
-def scrape_website(url):
+def scrape_website_selenium(url):
     # Configure Selenium with a headless browser
     options = Options()
     options.headless = True

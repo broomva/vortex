@@ -4,16 +4,8 @@ import json
 import os
 from typing import Tuple
 
-from dagster import (
-    AssetExecutionContext,
-    AssetOut,
-    MetadataValue,
-    Out,
-    Output,
-    asset,
-    multi_asset,
-    op,
-)
+from dagster import (AssetExecutionContext, AssetOut, MetadataValue, Out,
+                     Output, asset, multi_asset, op)
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
@@ -22,7 +14,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
 from ..resources import PostgresResource
-from ..tools import scrape_website, tools
+from ..tools import scrape_website, scrape_website_selenium, tools
 
 
 @asset(
@@ -73,7 +65,9 @@ def get_article(context, get_url) -> str:
     if not get_url:
         return None
     try:
-        response = scrape_website(get_url[0])
+        response = scrape_website_selenium(get_url[0])
+        if response is None:
+            response = scrape_website(get_url[0])
     except Exception as e:
         context.log.info(f"Error {e}")
         response = None
