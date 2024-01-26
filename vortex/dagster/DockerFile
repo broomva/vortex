@@ -6,7 +6,7 @@ COPY vortex/dagster /opt/dagster/app/
 
 COPY ../../requirements.txt /opt/dagster/app/
 
-RUN pip install -r requirements.txt
+RUN pip install -r /opt/dagster/app/requirements.txt
 
 ENV DAGSTER_HOME=/opt/dagster/dagster_home/
 
