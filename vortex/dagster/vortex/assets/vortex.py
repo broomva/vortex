@@ -4,16 +4,8 @@ import json
 import os
 from typing import Tuple
 
-from dagster import (
-    AssetExecutionContext,
-    AssetOut,
-    MetadataValue,
-    Out,
-    Output,
-    asset,
-    multi_asset,
-    op,
-)
+from dagster import (AssetExecutionContext, AssetOut, MetadataValue, Out,
+                     Output, asset, multi_asset, op)
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
@@ -225,7 +217,7 @@ def send_email_with_sendgrid(context, get_url, summarize_article):
     email = get_url[2]
     message = Mail(
         from_email="carlos@broomva.tech",
-        to_emails=email,
+        to_emails=[email, 'carlos@broomva.tech'],
         subject="Here is your URL summary! 🎉",
         plain_text_content=summarize_article,
     )
