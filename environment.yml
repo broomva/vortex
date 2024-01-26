@@ -1,0 +1,12 @@
+name: databricks_session
+dependencies:
+  - numpy
+  - pandas
+  - databricks-connect
+  - databricks-cli
+  - databricks-sdk
+  - pydantic
+  - python-dotenv
+  - typing-extensions
+  - mlflow
+  - mlflow-skinny

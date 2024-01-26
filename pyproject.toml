@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "databricks-session"
+version = "0.3.0"
+description = "A simple util to get a spark and mlflow session objects from an .env file"
+authors = ["Carlos D. Escobar-Valbuena <carlosdavidescobar@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "databricks_session"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+mlflow = "^2.4.1"
+databricks-connect = "^13.1.0"
+pydantic = "^1.10.9"
+python-dotenv = "^1.0.0"
+typing-extensions = "^4.7.0"
+databricks-sql-connector = "^2.7.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

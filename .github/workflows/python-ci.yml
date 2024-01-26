@@ -1,0 +1,106 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: python-ci
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      tags:
+        description: 'CI Tags'
+        required: false
+        type: boolean
+      environment:
+        description: 'Environment to run CI'
+        type: environment
+        required: true
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        pip install black pylint
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Modify Files using Current Branch Name
+      run: |
+        if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+          # Find and update Python files with Jinja pattern
+          find . -type f -name "*.py" -exec sh -c '
+            for file do
+              # Replace {{ git_branch }} with the current branch name
+              sed -i "s/{{ git_branch }}/$GITHUB_REF_NAME/g" "$file"
+            done
+          ' sh {} +
+        fi
+    - name: Auto Lint with black, pylint
+      run: |
+        black .
+        black --diff --check $(git ls-files '*.py')
+        pylint --disable=all --enable=unused-import $(git ls-files '*.py')
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add .
+        git commit -m "chore(versioning): versioning and linting changes" || echo "No changes to commit"
+        git push || echo "No changes to push"
+
+    - name: Handle Versioning
+      uses: google-github-actions/release-please-action@v3
+      with:
+        release-type: python
+        package-name: release-please-action
+
+
+    - name: Check if commit is a result of PR merge
+      id: check
+      run: |
+        commit_message=$(git log --format=%B -n 1 ${{ github.sha }})
+        if [[ "$commit_message" == *"Merge pull request #"* ]]; then 
+          echo "::set-output name=is_pr_merge::true"
+        else 
+          echo "::set-output name=is_pr_merge::false"
+        fi
+          
+    - name: Dispatch custom event for python-cd workflow
+      if: ${{ steps.check.outputs.is_pr_merge == 'true' }}
+      uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.PAT }} # assuming you've set this secret in your repo
+        repository: ${{ github.repository }}
+        event-type: python-ci
+  # release-please:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: google-github-actions/release-please-action@v3
+  #       with:
+  #         release-type: node
+  #         package-name: release-please-action
