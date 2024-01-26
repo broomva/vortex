@@ -48,8 +48,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pytest
         pip install black pylint
-        pip install poetry
-        poetry install
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Modify Files using Current Branch Name
       run: |
         if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
@@ -107,5 +106,3 @@ jobs:
   #         package-name: release-please-action
   
   # pylint --disable=all --enable=unused-import $(git ls-files '*.py')
-
-  # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
