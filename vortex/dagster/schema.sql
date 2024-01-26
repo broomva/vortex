@@ -16,6 +16,7 @@ create server airtable_server
 create foreign table airtable_articles (
   	article_id	int4,
 	url	text,
+  email text,
 	created_at	timestamp,
 	last_update timestamp
 )

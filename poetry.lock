@@ -4308,6 +4308,18 @@ websockets = ">=5.0"
 dev = ["black", "flake8", "flake8-black", "flake8-docstrings", "flake8-isort", "gitchangelog", "pre-commit", "pystache"]
 
 [[package]]
+name = "python-http-client"
+version = "3.3.7"
+description = "HTTP REST client, simplified for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+files = [
+    {file = "python_http_client-3.3.7-py3-none-any.whl", hash = "sha256:ad371d2bbedc6ea15c26179c6222a78bc9308d272435ddf1d5c84f068f249a36"},
+    {file = "python_http_client-3.3.7.tar.gz", hash = "sha256:bf841ee45262747e00dec7ee9971dfb8c7d83083f5713596488d67739170cea0"},
+]
+
+[[package]]
 name = "python-multipart"
 version = "0.0.6"
 description = "A streaming multipart parser for Python"
@@ -4786,6 +4798,22 @@ typing_extensions = ">=4.9.0"
 urllib3 = {version = ">=1.26,<3", extras = ["socks"]}
 
 [[package]]
+name = "sendgrid"
+version = "6.11.0"
+description = "Twilio SendGrid library for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "sendgrid-6.11.0-py3-none-any.whl", hash = "sha256:43ecf5bb742ea5850c7cfe68f5e7d9948772352306d4e83e119899959538b884"},
+    {file = "sendgrid-6.11.0.tar.gz", hash = "sha256:71424b2a97f5a034121ea3b2666c653ba0ed315982f0d57b7851c0c9503dc5ab"},
+]
+
+[package.dependencies]
+python-http-client = ">=3.2.1"
+starkbank-ecdsa = ">=2.0.1"
+
+[[package]]
 name = "setuptools"
 version = "69.0.3"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -4984,6 +5012,17 @@ files = [
 dev = ["build", "flake8"]
 doc = ["sphinx"]
 test = ["pytest", "pytest-cov"]
+
+[[package]]
+name = "starkbank-ecdsa"
+version = "2.2.0"
+description = "A lightweight and fast pure python ECDSA library"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "starkbank-ecdsa-2.2.0.tar.gz", hash = "sha256:9399c3371b899d4a235b68a1ed7919d202fbf024bd2c863ae8ebdad343c2a63a"},
+]
 
 [[package]]
 name = "starlette"
@@ -6020,5 +6059,5 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.11.7"
-content-hash = "04c12b617cd54910a376da0a0c06c1b07a83754708d5d69dbc16d896160efbec"
+python-versions = "^3.11"
+content-hash = "af7d902544682816d7b12926ddd9f4cf7a7209fef2eb5b8f4af2aa9494101fc9"

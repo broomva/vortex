@@ -1,22 +1,17 @@
 # %%
 
 import json
+import os
 from typing import Tuple
 
-from dagster import (
-    AssetExecutionContext,
-    AssetOut,
-    MetadataValue,
-    Out,
-    Output,
-    asset,
-    multi_asset,
-    op,
-)
+from dagster import (AssetExecutionContext, AssetOut, MetadataValue, Out,
+                     Output, asset, multi_asset, op)
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 from openai import OpenAI
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 from ..resources import PostgresResource
 from ..tools import scrape_website, tools
@@ -204,3 +199,26 @@ def write_consolidated_summary(context, consolidated_summary, get_articles_summa
 
 
 # %%
+
+@asset(
+    deps=[update_articles_table_with_summary],
+    group_name="gather_articles",
+)
+def send_email_with_sendgrid(context, get_url, summarize_article):
+    email = get_url[2]
+    message = Mail(
+        from_email='carlos@broomva.tech',
+        to_emails=email,
+        subject='Here is your URL summary! 🎉',
+        plain_text_content=summarize_article)
+    
+    context.log.info(f"Sending email to {email}")
+    context.log.info(f"Sending email with {summarize_article}")
+
+    try:
+        sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        response = sg.send(message)
+        context.log.info(f"Email sent. Status code: {response.status_code}")
+    except Exception as e:
+        context.log.error(f"Failed to send email: {e}")
+        raise e
