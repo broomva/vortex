@@ -45,4 +45,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.dagster]
-module_name = "vortex.dagster.vortex"
+module_name = "vortex.flows.vortex"

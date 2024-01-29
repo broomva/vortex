@@ -1,4 +1,4 @@
 locations:
 - code_source:
-    package_name: vortex.dagster.vortex
+    package_name: vortex.flows.vortex
   location_name: vortex
