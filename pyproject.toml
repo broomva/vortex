@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "vortex"
+name = "vortex-python"
 version = "0.1.2"
 description = "Orchestrated LLM-powered Data Processing and SQL Chat Agent"
 authors = ["Carlos D. Escobar-Valbuena <carlosdavidescobar@gmail.com>"]

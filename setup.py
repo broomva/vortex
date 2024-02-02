@@ -33,111 +33,111 @@ with open("requirements.txt") as f:
     required = f.read().splitlines()
 
 
-# if sys.version_info < (3, 8):
-#     find_namespace_packages()
-#     print("Error: vortex does not support this version of Python.")
-#     print("Please upgrade to Python 3.8 or higher.")
-#     sys.exit(1)
+# # if sys.version_info < (3, 8):
+# #     find_namespace_packages()
+# #     print("Error: vortex does not support this version of Python.")
+# #     print("Please upgrade to Python 3.8 or higher.")
+# #     sys.exit(1)
 
 
-def prepare_data_files(directory, extensions):
-    files = []
-    for ext in extensions:
-        files.extend(glob.glob(f"{directory}/*.{ext}"))
-    return files
+# def prepare_data_files(directory, extensions):
+#     files = []
+#     for ext in extensions:
+#         files.extend(glob.glob(f"{directory}/*.{ext}"))
+#     return files
 
 
-data_files_structure = [
-    (
-        "vortex",
-        prepare_data_files(
-            "vortex",
-            ["csv", "sql", "txt", "md", "html", "css", "json", "yaml", "faiss", "pkl"],
-        ),
-    ),
-]
-
-
-setuptools.setup(
-    name="vortex",
-    packages=find_packages(exclude=["vortex_tests"]),
-    install_requires=[
-        "dagster",
-        "dagster-cloud",
-        "boto3",
-        "pandas",
-        "matplotlib",
-        "langchain",
-        "langchain_openai",
-        "openai",
-        "sqlalchemy",
-        "psycopg2-binary",
-        "pyautogen",
-        "bs4",
-        "langchainhub",
-        "langchain-community",
-        "selenium",
-        "html2text",
-        "chainlit",
-        "faiss-cpu",
-        "chromadb",
-        "tiktoken",
-        "pymupdf",
-        # "duckduckgo",
-        "wikipedia",
-        "sendgrid",
-    ],
-    extras_require={"dev": ["dagster-webserver", "pytest"]},
-)
+# data_files_structure = [
+#     (
+#         "vortex",
+#         prepare_data_files(
+#             "vortex",
+#             ["csv", "sql", "txt", "md", "html", "css", "json", "yaml", "faiss", "pkl"],
+#         ),
+#     ),
+# ]
 
 
 # setuptools.setup(
-#     name=name,
-#     version=version,
-#     description=description,
-#     long_description=readme,
-#     long_description_content_type="text/markdown",
-#     author="Carlos D. Escobar-Valbuena",
-#     author_email="carlosdavidescobar@gmail.com",
-#     license="MIT",
-#     classifiers=[
-#         release_status,
-#         "License :: OSI Approved :: MIT License",
-#         "Operating System :: OS Independent",
-#         "Development Status :: 3 - Alpha",
-#         "Intended Audience :: Developers",
-#         "Programming Language :: Python" "Programming Language :: Python :: 3.11",
-#         "Topic :: Software Development :: Libraries :: Python Modules",
-#     ],
+#     name="vortex-python",
 #     packages=find_packages(exclude=["vortex_tests"]),
-#     install_requires=required,
+#     install_requires=[
+#         "dagster",
+#         "dagster-cloud",
+#         "boto3",
+#         "pandas",
+#         "matplotlib",
+#         "langchain",
+#         "langchain_openai",
+#         "openai",
+#         "sqlalchemy",
+#         "psycopg2-binary",
+#         "pyautogen",
+#         "bs4",
+#         "langchainhub",
+#         "langchain-community",
+#         "selenium",
+#         "html2text",
+#         "chainlit",
+#         "faiss-cpu",
+#         "chromadb",
+#         "tiktoken",
+#         "pymupdf",
+#         # "duckduckgo",
+#         "wikipedia",
+#         "sendgrid",
+#     ],
 #     extras_require={"dev": ["dagster-webserver", "pytest"]},
-#     python_requires=">=3.8",
-#     include_package_data=True,
-#     setup_requires=["setuptools", "wheel"],
-#     tests_require=["pytest"],
-#     test_suite="tests",
-#     zip_safe=False,
-#     url="https://github.com/Broomva/vortex",
-#     package_data={
-#         "vortex": [
-#             "*.json",
-#             "*.yaml",
-#             "*.sql",
-#             "*.csv",
-#             "*.txt",
-#             "*.md",
-#             "*.html",
-#             "*.css",
-#             "*.pkl",
-#             "*.faiss",
-#         ],
-#     },
-#     data_files=data_files_structure,
-#     py_modules=["main"],
-#     entry_points={
-#         "console_scripts": [
-#             "vortex=main:main",
-#         ],
-#     },
 # )
+
+
+setuptools.setup(
+    name=name,
+    version=version,
+    description=description,
+    long_description=readme,
+    long_description_content_type="text/markdown",
+    author="Carlos D. Escobar-Valbuena",
+    author_email="carlosdavidescobar@gmail.com",
+    license="MIT",
+    classifiers=[
+        release_status,
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Programming Language :: Python" "Programming Language :: Python :: 3.11",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
+    packages=find_packages(exclude=["vortex_tests"]),
+    install_requires=required,
+    extras_require={"dev": ["dagster-webserver", "pytest"]},
+    python_requires=">=3.8",
+    include_package_data=True,
+    setup_requires=["setuptools", "wheel"],
+    tests_require=["pytest"],
+    test_suite="tests",
+    zip_safe=False,
+    url="https://github.com/Broomva/vortex",
+    package_data={
+        "vortex": [
+            "*.json",
+            "*.yaml",
+            "*.sql",
+            "*.csv",
+            "*.txt",
+            "*.md",
+            "*.html",
+            "*.css",
+            "*.pkl",
+            "*.faiss",
+        ],
+    },
+    # data_files=data_files_structure,
+    py_modules=["main"],
+    entry_points={
+        "console_scripts": [
+            "vortex=main:main",
+        ],
+    },
+)

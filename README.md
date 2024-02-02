@@ -1,5 +1,5 @@
-# Databricks Session Util
-**A simple utility for spark and mlflow session objects**
+# Vortex
+**A Versatile Orchestrated Execution engine for data pipelines**
 
 
 ## Setup
