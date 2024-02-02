@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/Broomva/vortex/compare/v0.1.0...v0.1.1) (2024-02-02)
+
+
+### Bug Fixes
+
+* updated poetry ([343cf15](https://github.com/Broomva/vortex/commit/343cf15c68fd8e77900291463e17550da732b85d))
+
 ## 0.1.0 (2024-02-02)
 
 
