@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/Broomva/vortex/compare/v0.1.3...v0.1.4) (2024-02-02)
+
+
+### Bug Fixes
+
+* fixing setup to work with dagster deploy ([875093c](https://github.com/Broomva/vortex/commit/875093cb18525a2c06dfacf0dc049897ff0da56c))
+
 ## [0.1.3](https://github.com/Broomva/vortex/compare/v0.1.2...v0.1.3) (2024-02-02)
 
 
