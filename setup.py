@@ -7,21 +7,21 @@ import setuptools
 from setuptools import find_namespace_packages, find_packages
 
 # Package metadata.
-name = "vortex-python"
-description = (
-    "A simple util to get a spark and mlflow session objects from an .env file"
-)
+# name = "vortex-python"
+# description = (
+#     "A simple util to get a spark and mlflow session objects from an .env file"
+# )
 
-package_root = os.path.abspath(os.path.dirname(__file__))
+# package_root = os.path.abspath(os.path.dirname(__file__))
 
-version = {}
-with open(os.path.join(package_root, "version.py")) as fp:
-    exec(fp.read(), version)
-version = version["__version__"]
+# version = {}
+# with open(os.path.join(package_root, "version.py")) as fp:
+#     exec(fp.read(), version)
+# version = version["__version__"]
 
-readme_filename = os.path.join(package_root, "README.md")
-with io.open(readme_filename, encoding="utf-8") as readme_file:
-    readme = readme_file.read()
+# readme_filename = os.path.join(package_root, "README.md")
+# with io.open(readme_filename, encoding="utf-8") as readme_file:
+#     readme = readme_file.read()
 
 # Should be one of:
 # 'Development Status :: 3 - Alpha'
@@ -29,8 +29,8 @@ with io.open(readme_filename, encoding="utf-8") as readme_file:
 # 'Development Status :: 5 - Production/Stable'
 release_status = "Development Status :: 3 - Alpha"
 
-with open("requirements.txt") as f:
-    required = f.read().splitlines()
+# with open("requirements.txt") as f:
+#     required = f.read().splitlines()
 
 
 # # if sys.version_info < (3, 8):
@@ -92,10 +92,10 @@ with open("requirements.txt") as f:
 
 
 setuptools.setup(
-    name=name,
-    version=version,
-    description=description,
-    long_description=readme,
+    name='vortex-python',
+    version="0.1.2",
+    description='Versatile Orchestrated Execution Engine for Data & AI Pipelines',
+    # long_description=readme,
     long_description_content_type="text/markdown",
     author="Carlos D. Escobar-Valbuena",
     author_email="carlosdavidescobar@gmail.com",
@@ -110,7 +110,32 @@ setuptools.setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     packages=find_packages(exclude=["vortex_tests"]),
-    install_requires=required,
+    install_requires=[
+        'pydantic',
+        'python-dotenv',
+        'typing-extensions',
+        'urllib3',
+        'dagster',
+        'pandas',
+        'langchain',
+        'langchain-openai',
+        'openai',
+        'sqlalchemy',
+        'psycopg2-binary',
+        'bs4',
+        'dagster-webserver',
+        'langchainhub',
+        'selenium',
+        'html2text',
+        'chainlit',
+        'chromadb',
+        'tiktoken',
+        'pymupdf',
+        'duckduckgo-search',
+        'wikipedia',
+        'mlflow',
+        'sendgrid',
+        ],
     extras_require={"dev": ["dagster-webserver", "pytest"]},
     python_requires=">=3.8",
     include_package_data=True,

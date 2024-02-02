@@ -1,5 +1,5 @@
 # Vortex
-**A Versatile Orchestrated Execution engine for data pipelines**
+**Versatile Orchestrated Execution Engine for Data & AI Pipelines**
 
 
 ## Setup
