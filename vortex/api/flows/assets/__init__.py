@@ -2,6 +2,7 @@ from functools import update_wrapper, wraps
 
 from dagster import AssetExecutionContext, MetadataValue, asset
 
+from vortex.api.flows.resources.openai import OpenAIResource
 from vortex.api.flows.resources.postgres import PostgresResource
 
 
@@ -44,7 +45,7 @@ def openai_asset(name: str, group_name: str, query: str):
             name=name, group_name=group_name, required_resource_keys={"openai_resource"}
         )
         def wrapper(context: AssetExecutionContext):
-            openai_resource = context.resources.openai_resource
+            openai_resource: OpenAIResource = context.resources.openai_resource
             try:
                 response = openai_resource.get(query)
                 context.add_output_metadata(

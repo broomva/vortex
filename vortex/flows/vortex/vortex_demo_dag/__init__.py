@@ -59,14 +59,14 @@ def get_article(context, get_url) -> str:
         return None
     try:
         try:
-            response = scrape_website_selenium(get_url[0])
-            context.log.debug(f"Selenium response {response}")
+            response = scrape_website(get_url[0])
+            context.log.debug(f"BS4 response {response}")
         except Exception as e:
             response = None
         if response is None:
             context.log.warning(f"Selenium response was None. Using BS4")
-            response = scrape_website(get_url[0])
-            context.log.debug(f"Bs4 Scrape response {response}")
+            response = scrape_website_selenium(get_url[0])
+            context.log.debug(f"Selenium Scrape response {response}")
     except Exception as e:
         context.log.info(f"Error {e}")
         raise e
