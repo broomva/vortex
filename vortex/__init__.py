@@ -4,5 +4,4 @@ __all__ = list(globals().keys())
 
 
 def entrypoint():
-    # init()
-    ...
+    print("Vortex is installed!")

@@ -1,0 +1,97 @@
+version: "3.7"
+
+services:
+  # This service runs the postgres DB used by dagster for run storage, schedule storage,
+  # and event log storage.
+  vortex_flows_postgres:
+    image: postgres:11
+    container_name: vortex_flows_postgres
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "vortex"
+      POSTGRES_DB: "vortex"
+    networks:
+      - vortex_flows_network
+
+  # This service runs the gRPC server that loads your user code, in both dagster-webserver
+  # and dagster-daemon. By setting DAGSTER_CURRENT_IMAGE to its own image, we tell the
+  # run launcher to use this same image when launching runs in a new container as well.
+  # Multiple containers like this can be deployed separately - each just needs to run on
+  # its own port, and have its own entry in the workspace.yaml file that's loaded by the
+      # webserver.
+  vortex_flows_user_code:
+    build:
+      context: .
+      dockerfile: ./DockerFile_user_code
+    container_name: vortex_flows_user_code
+    image: vortex_flows_user_code_image
+    restart: always
+    environment:
+      DAGSTER_POSTGRES_USER: "admin"
+      DAGSTER_POSTGRES_PASSWORD: "vortex"
+      DAGSTER_POSTGRES_DB: "vortex"
+      DAGSTER_CURRENT_IMAGE: "vortex_flows_user_code_image"
+    networks:
+      - vortex_flows_network
+
+  # This service runs dagster-webserver, which loads your user code from the user code container.
+  # Since our instance uses the QueuedRunCoordinator, any runs submitted from the webserver will be put on
+  # a queue and later dequeued and launched by dagster-daemon.
+  vortex_flows_webserver:
+    build:
+      context: .
+      dockerfile: ./DockerFile_dagster
+    entrypoint:
+      - dagster-webserver
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3000"
+      - -w
+      - workspace.yaml
+    container_name: vortex_flows_webserver
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    environment:
+      DAGSTER_POSTGRES_USER: "admin"
+      DAGSTER_POSTGRES_PASSWORD: "vortex"
+      DAGSTER_POSTGRES_DB: "vortex"
+    volumes: # Make docker client accessible so we can terminate containers from the webserver
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks:
+      - vortex_flows_network
+    depends_on:
+      - vortex_flows_postgres
+      - vortex_flows_user_code
+
+  # This service runs the dagster-daemon process, which is responsible for taking runs
+  # off of the queue and launching them, as well as creating runs from schedules or sensors.
+  vortex_flows_daemons:
+    build:
+      context: .
+      dockerfile: ./DockerFile_dagster
+    entrypoint:
+      - dagster-daemon
+      - run
+    container_name: vortex_flows_daemons
+    restart: on-failure
+    environment:
+      DAGSTER_POSTGRES_USER: "admin"
+      DAGSTER_POSTGRES_PASSWORD: "vortex"
+      DAGSTER_POSTGRES_DB: "vortex"
+    volumes: # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks:
+      - vortex_flows_network
+    depends_on:
+      - vortex_flows_postgres
+      - vortex_flows_user_code
+
+networks:
+  vortex_flows_network:
+    driver: bridge
+    name: vortex_flows_network

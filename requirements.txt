@@ -15,7 +15,7 @@ langchainhub
 selenium
 html2text
 chainlit
-faiss-cpu
+# faiss-cpu
 chromadb
 tiktoken
 pymupdf

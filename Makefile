@@ -25,5 +25,5 @@ package_list:
 create_env:
 	conda deactivate -n vortex \
 	&& conda env remove -n vortex -y \
-	&& conda create -n vortex python=3.10 -y \
+	&& conda create -n vortex python=3.11 -y \
 	&& conda activate vortex
