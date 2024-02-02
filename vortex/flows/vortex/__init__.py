@@ -1,6 +1,10 @@
-#%%
-from dagster import (Definitions, ScheduleDefinition, define_asset_job,
-                     load_assets_from_package_module)
+# %%
+from dagster import (
+    Definitions,
+    ScheduleDefinition,
+    define_asset_job,
+    load_assets_from_package_module,
+)
 
 from vortex.api.flows import resources
 
