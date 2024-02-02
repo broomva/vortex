@@ -7,7 +7,7 @@ import setuptools
 from setuptools import find_namespace_packages, find_packages
 
 # Package metadata.
-name = "vortex"
+name = "vortex-python"
 description = (
     "A simple util to get a spark and mlflow session objects from an .env file"
 )

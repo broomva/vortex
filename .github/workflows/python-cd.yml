@@ -56,5 +56,3 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
-#    - name: Build the Docker image
-#      run: docker build . --file Dockerfile --tag llm_explorer:$(date +%s)
