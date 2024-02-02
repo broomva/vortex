@@ -6,7 +6,8 @@ FROM --platform=linux/amd64 python:3.11
 RUN pip install \
     dagster \
     dagster-postgres \
-    dagster-docker
+    dagster-docker \
+    vortex-python
 
 # Add repository code
 

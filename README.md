@@ -7,7 +7,7 @@
 ### Quick Install
 
 ```shell
-python -m pip install vortex
+python -m pip install vortex-python
 ```
 
 ### Build from source

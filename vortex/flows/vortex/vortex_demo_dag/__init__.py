@@ -5,7 +5,6 @@ import os
 from typing import Tuple
 
 from dagster import AssetExecutionContext, MetadataValue, asset
-
 # from langchain import hub
 # from langchain.agents import AgentExecutor, create_openai_tools_agent
 # from langchain_openai import ChatOpenAI
@@ -15,7 +14,8 @@ from sendgrid.helpers.mail import Mail
 
 from vortex.api.flows.assets import openai_asset, postgres_asset
 from vortex.api.flows.resources import OpenAIResource, PostgresResource
-from vortex.api.flows.tools import scrape_website, scrape_website_selenium, tools
+from vortex.api.flows.tools import (scrape_website, scrape_website_selenium,
+                                    tools)
 
 
 @postgres_asset(
@@ -122,7 +122,7 @@ def update_articles_table_with_summary(
     context.log.info(f"Running write_summary with {query}")
     context.add_output_metadata(
         metadata={
-            "response": MetadataValue.md(response),
+            "response": MetadataValue.md(str(response)),
         }
     )
     return response
