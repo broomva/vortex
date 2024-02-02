@@ -1,15 +1,16 @@
-#%%
+# %%
 # insert your API key here
 openai_api_key = "<>"
 
-#%%
-from langchain.utilities import SQLDatabase
-from langchain.llms import OpenAI
 from langchain.agents import create_sql_agent
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents.agent_types import AgentType
+from langchain.llms import OpenAI
 
-#%%
+# %%
+from langchain.utilities import SQLDatabase
+
+# %%
 
 db = SQLDatabase.from_uri("sqlite:///chinook.db")
 
@@ -29,9 +30,7 @@ agent_executor = create_sql_agent(
 )
 
 
-agent_executor.run(
-    "How many employees are there?"
-)
+agent_executor.run("How many employees are there?")
 
 
 FORMAT_INSTRUCTIONS = """
@@ -49,10 +48,10 @@ Final Answer: the final answer to the original input question"""
 agent_executor.run("Describe the playlisttrack table")
 
 
-#%%
+# %%
 
 
-%pip install --upgrade --quiet  langchain langchain-community langchain-experimental
+# %pip install --upgrade --quiet  langchain langchain-community langchain-experimental
 
 
 from langchain.sql_database import SQLDatabase
@@ -72,7 +71,7 @@ agent_executor.invoke(
 )
 
 
-#%%
+# %%
 
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from langchain_openai import ChatOpenAI

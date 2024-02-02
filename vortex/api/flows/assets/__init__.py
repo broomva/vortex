@@ -5,10 +5,15 @@ from dagster import AssetExecutionContext, MetadataValue, asset
 from vortex.api.flows.resources.postgres import PostgresResource
 
 
-def postgres_asset(name: str, group_name: str, query: str, params = None, deps = None):
+def postgres_asset(name: str, group_name: str, query: str, params=None, deps=None):
     def decorator(func):
         @wraps(func)
-        @asset(name=name, group_name=group_name, required_resource_keys={"postgres_resource"}, deps=deps)
+        @asset(
+            name=name,
+            group_name=group_name,
+            required_resource_keys={"postgres_resource"},
+            deps=deps,
+        )
         def wrapper(context: AssetExecutionContext, **kwargs):
             postgres_resource: PostgresResource = context.resources.postgres_resource
             try:
@@ -24,16 +29,20 @@ def postgres_asset(name: str, group_name: str, query: str, params = None, deps =
             except Exception as e:
                 context.log.error(f"Error in asset {func.__name__}: {e}")
                 raise e
+
         # Update wrapper function to reflect the name and docstring of the decorated function
         update_wrapper(wrapper, func)
         return wrapper
+
     return decorator
 
 
 def openai_asset(name: str, group_name: str, query: str):
     def decorator(func):
         @wraps(func)
-        @asset(name=name, group_name=group_name, required_resource_keys={"openai_resource"})
+        @asset(
+            name=name, group_name=group_name, required_resource_keys={"openai_resource"}
+        )
         def wrapper(context: AssetExecutionContext):
             openai_resource = context.resources.openai_resource
             try:
@@ -47,6 +56,8 @@ def openai_asset(name: str, group_name: str, query: str):
             except Exception as e:
                 context.log.error(f"Error in asset {func.__name__}: {e}")
                 raise e
+
         update_wrapper(wrapper, func)
         return wrapper
+
     return decorator

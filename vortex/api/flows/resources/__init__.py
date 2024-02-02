@@ -20,7 +20,7 @@ class BaseResource(ABC):
     Attributes:
         None
     """
-    
+
     @abstractmethod
     def query(self, query, params=None):
         """

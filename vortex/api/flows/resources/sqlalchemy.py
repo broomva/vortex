@@ -16,7 +16,7 @@ class SQLAlchemyResource(ConfigurableResource):
     """
 
     url: Optional[str] = os.getenv("SQLALCHEMY_URL")
-    
+
     @contextlib.contextmanager
     def connect(self):
         engine = create_engine(self.url, pool_pre_ping=True)

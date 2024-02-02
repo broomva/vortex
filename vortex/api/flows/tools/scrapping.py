@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 brwoserless_api_key = os.getenv("BROWSERLESS_API_KEY")
 
+
 def scrape_website(url: str):
     # scrape website, and also will summarize the content based on objective if the content is too large
     # objective is the original objective & task that user give to the agent, url is the url of the website to be scraped

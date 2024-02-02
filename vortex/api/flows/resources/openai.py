@@ -1,4 +1,3 @@
-
 import os
 from typing import Optional
 
@@ -49,7 +48,9 @@ class OpenAIResource(ConfigurableResource):
         )
         return response.choices[0].message.content
 
-    def get_agent_response(self, user_content: str, hub_prompt: str = "hwchase17/openai-tools-agent"):
+    def get_agent_response(
+        self, user_content: str, hub_prompt: str = "hwchase17/openai-tools-agent"
+    ):
         llm = ChatOpenAI(
             model=self.model,
             temperature=self.temperature,

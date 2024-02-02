@@ -5,6 +5,7 @@ import os
 from typing import Tuple
 
 from dagster import AssetExecutionContext, MetadataValue, asset
+
 # from langchain import hub
 # from langchain.agents import AgentExecutor, create_openai_tools_agent
 # from langchain_openai import ChatOpenAI
@@ -14,8 +15,7 @@ from sendgrid.helpers.mail import Mail
 
 from vortex.api.flows.assets import openai_asset, postgres_asset
 from vortex.api.flows.resources import OpenAIResource, PostgresResource
-from vortex.api.flows.tools import (scrape_website, scrape_website_selenium,
-                                    tools)
+from vortex.api.flows.tools import scrape_website, scrape_website_selenium, tools
 
 
 @postgres_asset(
@@ -31,12 +31,12 @@ from vortex.api.flows.tools import (scrape_website, scrape_website_selenium,
         )
         order by aa.article_id asc 
         limit 1
-    """
+    """,
 )
 def get_url(context: AssetExecutionContext, response):
     if response:
         url, article_id, email = response[0][0], response[0][1], response[0][2]
-    else: 
+    else:
         url, article_id, email = None, None, None
     context.log.info(f"Got url {url}")
     context.add_output_metadata(
@@ -127,6 +127,7 @@ def update_articles_table_with_summary(
     )
     return response
 
+
 @asset(
     deps=[update_articles_table_with_summary],
     group_name="gather_articles",
@@ -152,9 +153,6 @@ def send_email_with_sendgrid(context, get_url, summarize_article):
         raise e
 
 
-
-
-
 # @postgres_asset(
 #     name="update_articles_table_with_summary",
 #     group_name="gather_articles",
@@ -162,7 +160,7 @@ def send_email_with_sendgrid(context, get_url, summarize_article):
 #         INSERT INTO public.processed_articles (article_id, url, content, summary, created_at, reprocess)
 #         VALUES (%s, %s, %s, %s, NOW(), false)
 #         ON CONFLICT (article_id) DO UPDATE
-#         SET 
+#         SET
 #             url = EXCLUDED.url,
 #             content = EXCLUDED.content,
 #             summary = EXCLUDED.summary,
@@ -250,5 +248,3 @@ def send_email_with_sendgrid(context, get_url, summarize_article):
 
 
 # # %%
-
-
