@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/Broomva/vortex/compare/v0.1.2...v0.1.3) (2024-02-02)
+
+
+### Bug Fixes
+
+* updated package name ([f6f210e](https://github.com/Broomva/vortex/commit/f6f210e13f214ecae3c4bf743e736803e14e7161))
+
 ## [0.1.2](https://github.com/Broomva/vortex-python/compare/v0.1.1...v0.1.2) (2024-02-02)
 
 
