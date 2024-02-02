@@ -1,6 +1,10 @@
 [project]
 # Whether to enable telemetry (default: true). No personal data is collected.
-enable_telemetry = true
+enable_telemetry = false
+
+public = true
+
+id = "vortex-4ed8bxrZN55e"
 
 
 # List of environment variables to be provided by each user to use the app.
@@ -10,7 +14,9 @@ user_env = []
 session_timeout = 3600
 
 # Enable third parties caching (e.g LangChain cache)
-cache = false
+cache = true
+
+github = "https://github.com/Broomva/vortex"
 
 # Authorized origins 
 allow_origins = ["*"]
@@ -23,10 +29,10 @@ allow_origins = ["*"]
 prompt_playground = true
 
 # Process and display HTML in messages. This can be a security risk (see https://stackoverflow.com/questions/19603097/why-is-it-dangerous-to-render-user-generated-html-or-javascript)
-unsafe_allow_html = false
+unsafe_allow_html = true
 
 # Process and display mathematical expressions. This can clash with "$" characters in messages.
-latex = false
+latex = true
 
 # Authorize users to upload files with messages
 multi_modal = true
@@ -39,7 +45,7 @@ multi_modal = true
 
 [UI]
 # Name of the app and chatbot.
-name = "Chatbot"
+name = "Vortex Chat"
 
 # Show the readme while the thread is empty.
 show_readme_as_default = true
