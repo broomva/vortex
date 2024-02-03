@@ -3,8 +3,15 @@
 import os
 
 import pandas as pd
-from dagster import (AssetExecutionContext, MetadataValue, OpExecutionContext,
-                     RunRequest, asset, sensor)
+from dagster import (
+    AssetExecutionContext,
+    MetadataValue,
+    OpExecutionContext,
+    RunRequest,
+    asset,
+    sensor,
+)
+
 # from langchain import hub
 # from langchain.agents import AgentExecutor, create_openai_tools_agent
 # from langchain_openai import ChatOpenAI
@@ -14,8 +21,7 @@ from sendgrid.helpers.mail import Mail
 
 from vortex.api.flows.assets import openai_asset, postgres_asset
 from vortex.api.flows.resources import OpenAIResource, PostgresResource
-from vortex.api.flows.tools import (scrape_website, scrape_website_selenium,
-                                    tools)
+from vortex.api.flows.tools import scrape_website, scrape_website_selenium, tools
 
 
 @postgres_asset(
@@ -249,10 +255,9 @@ def send_email_with_sendgrid(context, get_url, summarize_article):
 
 # # %%
 
+
 @sensor(job_name="vortex_demo_dag", minimum_interval_seconds=420)
-def new_row_sensor(
-    postgres_resource: PostgresResource, context: OpExecutionContext
-):
+def new_row_sensor(postgres_resource: PostgresResource, context: OpExecutionContext):
     rows = postgres_resource.query(
         """
         select article_id 
@@ -281,11 +286,16 @@ def new_row_sensor(
             run_config={},
         )
 
+
 # %%
 
 
-from dagster import (Definitions, ScheduleDefinition, define_asset_job,
-                     load_assets_from_package_module)
+from dagster import (
+    Definitions,
+    ScheduleDefinition,
+    define_asset_job,
+    load_assets_from_package_module,
+)
 
 from vortex.api.flows import resources
 
@@ -300,7 +310,13 @@ daily_refresh_schedule = ScheduleDefinition(
 
 
 defs = Definitions(
-    assets=[get_url, get_article, summarize_article, update_articles_table_with_summary, send_email_with_sendgrid],
+    assets=[
+        get_url,
+        get_article,
+        summarize_article,
+        update_articles_table_with_summary,
+        send_email_with_sendgrid,
+    ],
     sensors=[new_row_sensor],
     schedules=[daily_refresh_schedule],
     resources={
