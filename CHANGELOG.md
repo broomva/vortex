@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/Broomva/vortex/compare/v0.1.5...v0.1.6) (2024-02-03)
+
+
+### Bug Fixes
+
+* added baseline FE ([6ae963e](https://github.com/Broomva/vortex/commit/6ae963e1e707aaf90c2cc84873229fe196bd2c87))
+
 ## [0.1.5](https://github.com/Broomva/vortex/compare/v0.1.4...v0.1.5) (2024-02-03)
 
 
