@@ -35,4 +35,4 @@ docker_run:
 	docker run -p 3000:3000 --name vortex-flows vortex:latest  
 
 deploy_service:
-	(dagster-webserver -h 0.0.0.0 -p 3000 &) && (dagster-daemon run &)
+	dagster-webserver -h 0.0.0.0 -p 3000 && dagster-daemon run  
