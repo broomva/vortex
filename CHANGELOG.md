@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/Broomva/vortex/compare/v0.1.4...v0.1.5) (2024-02-03)
+
+
+### Bug Fixes
+
+* updated docker and deployment files ([a810bd7](https://github.com/Broomva/vortex/commit/a810bd77762c42ddea030338192586df9c984096))
+
 ## [0.1.4](https://github.com/Broomva/vortex/compare/v0.1.3...v0.1.4) (2024-02-02)
 
 
