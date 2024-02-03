@@ -11,11 +11,11 @@
 #         env: DAGSTER_PG_DB
 #       port: 5432
 
-compute_logs:
-  module: dagster.core.storage.root
-  class: LocalArtifactStorage
-  config:
-    base_dir: "/opt/dagster/logs/local/"
+# compute_logs:
+#   module: dagster.core.storage.root
+#   class: LocalArtifactStorage
+#   config:
+#     base_dir: "/opt/dagster/logs/local/"
 
 local_artifact_storage:
   module: dagster.core.storage.root

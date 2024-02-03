@@ -13,7 +13,7 @@ RUN pip install \
 
 WORKDIR /opt/dagster/app
 
-COPY vortex /opt/dagster/app/
+COPY sample_dag /opt/dagster/app/
 
 # Run dagster gRPC server on port 4000
 
@@ -21,4 +21,4 @@ EXPOSE 4000
 
 # CMD allows this to be overridden from run launchers or executors that want
 # to run other commands against your repository
-CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-f", "vorte/__init__.py"]
+CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-f", "sample_dag/__init__.py"]

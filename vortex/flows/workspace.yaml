@@ -1,3 +1,2 @@
 load_from:
-  # References the file copied into your Dockerfile
-  - python_file: vortex/vortex_demo_dag/__init__.py
+  - python_file: __init__.py

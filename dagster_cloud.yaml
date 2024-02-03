@@ -1,4 +1,4 @@
 locations:
 - code_source:
-    package_name: vortex.flows.vortex
+    package_name: vortex.flows.sample_dag
   location_name: vortex

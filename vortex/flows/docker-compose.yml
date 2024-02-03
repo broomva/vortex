@@ -22,7 +22,7 @@ services:
   vortex_flows_user_code:
     build:
       context: .
-      dockerfile: ./DockerFile_user_code
+      dockerfile: ./Dockerfile_user_code
     container_name: vortex_flows_user_code
     image: vortex_flows_user_code_image
     restart: always
@@ -40,7 +40,7 @@ services:
   vortex_flows_webserver:
     build:
       context: .
-      dockerfile: ./DockerFile_dagster
+      dockerfile: ./Dockerfile_dagster
     entrypoint:
       - dagster-webserver
       - -h
@@ -72,7 +72,7 @@ services:
   vortex_flows_daemons:
     build:
       context: .
-      dockerfile: ./DockerFile_dagster
+      dockerfile: ./Dockerfile_dagster
     entrypoint:
       - dagster-daemon
       - run

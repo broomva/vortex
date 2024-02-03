@@ -1,4 +1,4 @@
-from vortex import defs
+from sample_dag import defs
 
 
 def test_def_can_load():

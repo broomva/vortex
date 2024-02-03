@@ -1,11 +1,10 @@
 # %%
 
-import json
 import os
-from typing import Tuple
 
-from dagster import AssetExecutionContext, MetadataValue, asset
-
+import pandas as pd
+from dagster import (AssetExecutionContext, MetadataValue, OpExecutionContext,
+                     RunRequest, asset, sensor)
 # from langchain import hub
 # from langchain.agents import AgentExecutor, create_openai_tools_agent
 # from langchain_openai import ChatOpenAI
@@ -15,7 +14,8 @@ from sendgrid.helpers.mail import Mail
 
 from vortex.api.flows.assets import openai_asset, postgres_asset
 from vortex.api.flows.resources import OpenAIResource, PostgresResource
-from vortex.api.flows.tools import scrape_website, scrape_website_selenium, tools
+from vortex.api.flows.tools import (scrape_website, scrape_website_selenium,
+                                    tools)
 
 
 @postgres_asset(
@@ -248,3 +248,64 @@ def send_email_with_sendgrid(context, get_url, summarize_article):
 
 
 # # %%
+
+@sensor(job_name="vortex_demo_dag", minimum_interval_seconds=420)
+def new_row_sensor(
+    postgres_resource: PostgresResource, context: OpExecutionContext
+):
+    rows = postgres_resource.query(
+        """
+        select article_id 
+        from public.airtable_articles aa
+        where not exists (
+            select 1 
+            from public.processed_articles pa 
+            where pa.article_id=aa.article_id
+        )
+        order by aa.article_id asc 
+        limit 1
+        """
+    )
+    article_id = rows[0][0] if rows else None
+    metadata = {
+        "article_id": article_id,
+        "timestamp": pd.Timestamp.now().isoformat() if article_id else "",
+    }
+    # context.add_output_metadata(metadata=metadata)
+    context.log.info(f"Got id {article_id}")
+
+    if rows:
+        # Trigger the job run
+        yield RunRequest(
+            run_key=f"new_article_trigger_id_{metadata['article_id']}_{metadata['timestamp']}",
+            run_config={},
+        )
+
+# %%
+
+
+from dagster import (Definitions, ScheduleDefinition, define_asset_job,
+                     load_assets_from_package_module)
+
+from vortex.api.flows import resources
+
+# from .vortex_demo_dag.new_row_sensor import new_row_sensor
+
+# Schedule
+
+daily_refresh_schedule = ScheduleDefinition(
+    job=define_asset_job(name="vortex_demo_dag"),
+    cron_schedule="0 0 * * *",
+)
+
+
+defs = Definitions(
+    assets=[get_url, get_article, summarize_article, update_articles_table_with_summary, send_email_with_sendgrid],
+    sensors=[new_row_sensor],
+    schedules=[daily_refresh_schedule],
+    resources={
+        "openai_resource": resources.OpenAIResource.configure_at_launch(),
+        "postgres_resource": resources.PostgresResource.configure_at_launch(),
+        "sqlalchemy_resource": resources.SQLAlchemyResource.configure_at_launch(),
+    },
+)
