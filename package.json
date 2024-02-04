@@ -3,13 +3,14 @@
   "version": "0.1.5",
   "private": true,
   "scripts": {
-    "fastapi-dev": "python -m uvicorn vortex.api:app --reload",
+    "fastapi": "python -m uvicorn vortex.api:app --reload",
     "vortex-flows-webserver": "dagster-webserver -h 0.0.0.0 -p 3001",
     "vortex-flows-daemon": "dagster-daemon run",
     "next-dev": "next dev",
-    "dev": "poetry install && concurrently \"npm run next-dev\" \"npm run fastapi-dev\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
+    "next-start": "next start",
+    "dev": "pip install -r requirements.txt && concurrently \"npm run next-dev\" \"npm run fastapi\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
+    "start": "pip install -r requirements.txt && concurrently \"npm run next-start\" \"npm run fastapi\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
     "build": "next build",
-    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
