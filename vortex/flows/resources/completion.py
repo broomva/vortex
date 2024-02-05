@@ -1,3 +1,4 @@
+#%%
 import os
 from typing import Optional
 
@@ -8,7 +9,7 @@ from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 from openai import OpenAI
 
-from ..tools import tools
+from vortex.ai.tools import tools
 
 load_dotenv()
 
@@ -64,3 +65,5 @@ class OpenAIResource(ConfigurableResource):
         user_input = {"input": user_content}
         response = agent_executor.invoke(user_input)
         return response["output"]
+
+# %%

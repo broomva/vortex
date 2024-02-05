@@ -3,15 +3,8 @@
 import os
 
 import pandas as pd
-from dagster import (
-    AssetExecutionContext,
-    MetadataValue,
-    OpExecutionContext,
-    RunRequest,
-    asset,
-    sensor,
-)
-
+from dagster import (AssetExecutionContext, MetadataValue, OpExecutionContext,
+                     RunRequest, asset, sensor)
 # from langchain import hub
 # from langchain.agents import AgentExecutor, create_openai_tools_agent
 # from langchain_openai import ChatOpenAI
@@ -19,9 +12,9 @@ from openai import OpenAI
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-from vortex.api.flows.assets import openai_asset, postgres_asset
-from vortex.api.flows.resources import OpenAIResource, PostgresResource
-from vortex.api.flows.tools import scrape_website, scrape_website_selenium, tools
+from vortex.ai.tools import scrape_website, scrape_website_selenium, tools
+from vortex.flows.assets import openai_asset, postgres_asset
+from vortex.flows.resources import OpenAIResource, PostgresResource
 
 
 @postgres_asset(
@@ -290,14 +283,10 @@ def new_row_sensor(postgres_resource: PostgresResource, context: OpExecutionCont
 # %%
 
 
-from dagster import (
-    Definitions,
-    ScheduleDefinition,
-    define_asset_job,
-    load_assets_from_package_module,
-)
+from dagster import (Definitions, ScheduleDefinition, define_asset_job,
+                     load_assets_from_package_module)
 
-from vortex.api.flows import resources
+from vortex.flows import resources
 
 # from .vortex_demo_dag.new_row_sensor import new_row_sensor
 

@@ -6,7 +6,6 @@ from langchain.agents import create_sql_agent
 from langchain.agents.agent_toolkits import SQLDatabaseToolkit
 from langchain.agents.agent_types import AgentType
 from langchain.llms import OpenAI
-
 # %%
 from langchain.utilities import SQLDatabase
 
@@ -53,41 +52,34 @@ agent_executor.run("Describe the playlisttrack table")
 
 # %pip install --upgrade --quiet  langchain langchain-community langchain-experimental
 
+#%%
 
+import os
+
+from langchain.agents import create_openai_tools_agent
+from langchain.agents.agent import AgentExecutor
 from langchain.sql_database import SQLDatabase
-
-db = SQLDatabase.from_uri("sqlite:///Chinook.db")
-
-
-from langchain_community.agent_toolkits import create_sql_agent
-from langchain_openai import ChatOpenAI
-
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-agent_executor = create_sql_agent(llm, db=db, agent_type="openai-tools", verbose=True)
-
-
-agent_executor.invoke(
-    "List the total sales per country. Which country's customers spent the most?"
-)
-
-
-# %%
-
-from langchain_community.agent_toolkits import SQLDatabaseToolkit
-from langchain_openai import ChatOpenAI
-
-toolkit = SQLDatabaseToolkit(db=db, llm=ChatOpenAI(temperature=0))
-context = toolkit.get_context()
-tools = toolkit.get_tools()
-
-
+from langchain_community.agent_toolkits import (SQLDatabaseToolkit,
+                                                create_sql_agent)
 from langchain_community.agent_toolkits.sql.prompt import SQL_FUNCTIONS_SUFFIX
 from langchain_core.messages import AIMessage, SystemMessage
-from langchain_core.prompts.chat import (
-    ChatPromptTemplate,
-    HumanMessagePromptTemplate,
-    MessagesPlaceholder,
-)
+from langchain_core.prompts.chat import (ChatPromptTemplate,
+                                         HumanMessagePromptTemplate,
+                                         MessagesPlaceholder)
+from langchain_core.utils.function_calling import convert_to_openai_function
+
+from vortex.ai.llm import LLM
+from vortex.ai.tools import tools as vortex_tools
+
+db = SQLDatabase.from_uri(os.environ.get("SQLALCHEMY_URL"))
+llm = LLM().llm
+agent_executor = create_sql_agent(llm, db=db, agent_type="openai-tools", verbose=True)
+
+# vortex_oai_tools = functions = [convert_to_openai_function(t) for t in vortex_tools]
+
+toolkit = SQLDatabaseToolkit(db=db, llm=llm)
+context = toolkit.get_context()
+tools = toolkit.get_tools() #+ vortex_oai_tools
 
 messages = [
     HumanMessagePromptTemplate.from_template("{input}"),
@@ -99,11 +91,6 @@ prompt = ChatPromptTemplate.from_messages(messages)
 prompt = prompt.partial(**context)
 
 
-from langchain.agents import create_openai_tools_agent
-from langchain.agents.agent import AgentExecutor
-
-llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
-
 agent = create_openai_tools_agent(llm, tools, prompt)
 
 agent_executor = AgentExecutor(
@@ -111,3 +98,7 @@ agent_executor = AgentExecutor(
     tools=toolkit.get_tools(),
     verbose=True,
 )
+
+#%%
+agent_executor.invoke({"input": "please extract the NER from the article 10"})
+

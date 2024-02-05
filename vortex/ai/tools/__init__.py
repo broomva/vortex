@@ -1,9 +1,14 @@
+#%%
 from langchain.agents import Tool
 
-from .scrapping import scrape_website, scrape_website_selenium
-from .search import search
+from vortex.ai.tools.scrapping import scrape_website, scrape_website_selenium
+from vortex.ai.tools.search import search
+
+# from langchain.tools import WikipediaQueryRun
+
 
 tools = [
+    # WikipediaQueryRun(),
     Tool(
         name="Search",
         func=search,
@@ -20,3 +25,5 @@ tools = [
         description="Useful when you need to get data from a website url and the regular Scrape Website method is not working correctly; DO NOT make up any url, the url should only be from the search results",
     ),
 ]
+
+# %%
