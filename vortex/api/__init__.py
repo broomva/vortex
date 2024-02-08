@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from vortex.ai.agents import VortexAgent
 from vortex.ai.agents.utils import logger, send_message
+
 # Internal imports
 from vortex.api.data_models import Conversation, SessionLocal
 
@@ -25,7 +26,6 @@ async def index():
     return {"msg": "Vortex is Running!"}
 
 
-
 # Dependency
 def get_db():
     try:
@@ -34,11 +34,12 @@ def get_db():
     finally:
         db.close()
 
+
 @app.post("/message")
 async def reply(request: Request, Body: str = Form(), db: Session = Depends(get_db)):
     # Extract the phone number from the incoming webhook request
     form_data = await request.form()
-    whatsapp_number = form_data['From'].split("whatsapp:")[-1]
+    whatsapp_number = form_data["From"].split("whatsapp:")[-1]
     print(f"Sending the LangChain response to this number: {whatsapp_number}")
 
     # Get the generated text from the LangChain agent
@@ -47,10 +48,8 @@ async def reply(request: Request, Body: str = Form(), db: Session = Depends(get_
     # Store the conversation in the database
     try:
         conversation = Conversation(
-            sender=whatsapp_number,
-            message=Body,
-            response=langchain_response
-            )
+            sender=whatsapp_number, message=Body, response=langchain_response
+        )
         db.add(conversation)
         db.commit()
         logger.info(f"Conversation #{conversation.id} stored in database")

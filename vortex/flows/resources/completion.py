@@ -1,4 +1,4 @@
-#%%
+# %%
 from typing import Optional
 
 from dagster import ConfigurableResource, EnvVar
@@ -42,5 +42,6 @@ class OpenAIResource(ConfigurableResource):
             max_tokens=self.max_tokens,
         )
         return response.choices[0].message.content
+
 
 # %%

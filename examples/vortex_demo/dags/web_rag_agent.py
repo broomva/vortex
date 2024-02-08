@@ -1,6 +1,12 @@
 # %%
-from dagster import (AssetExecutionContext, Definitions, MetadataValue,
-                     ScheduleDefinition, asset, define_asset_job)
+from dagster import (
+    AssetExecutionContext,
+    Definitions,
+    MetadataValue,
+    ScheduleDefinition,
+    asset,
+    define_asset_job,
+)
 
 from vortex.ai.tools import scrape_website, scrape_website_selenium
 from vortex.flows import resources
@@ -10,10 +16,12 @@ from vortex.flows.resources import OpenAIResource
 @asset(
     group_name="web_rag_agent",
     required_resource_keys={"openai_resource"},
-    config_schema={'url': str}
+    config_schema={"url": str},
 )
-def get_article(context,) -> str:
-    input_url = context.op_config['url']
+def get_article(
+    context,
+) -> str:
+    input_url = context.op_config["url"]
     context.log.info(f"Running get_article with {input_url}")
     if not input_url:
         return None
@@ -56,6 +64,7 @@ def summarize_article(context: AssetExecutionContext, get_article: str) -> str:
         }
     )
     return response
+
 
 # Schedule
 daily_refresh_schedule = ScheduleDefinition(

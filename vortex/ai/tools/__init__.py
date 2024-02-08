@@ -12,6 +12,7 @@ from vortex.ai.tools.search import serper_api_search
 
 load_dotenv()
 
+
 @tool
 def get_word_length(word: str) -> int:
     """
@@ -24,6 +25,7 @@ def get_word_length(word: str) -> int:
     int: The length of the word.
     """
     return len(word)
+
 
 wikipedia_tool = WikipediaQueryRun(
     api_wrapper=WikipediaAPIWrapper(top_k_results=3, doc_content_chars_max=4096)

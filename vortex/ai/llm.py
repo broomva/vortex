@@ -1,4 +1,4 @@
-#%%
+# %%
 
 import os
 from typing import Any, Callable, Dict, List, Optional, Union
@@ -16,6 +16,7 @@ class LLM(BaseModel):
         llm: An instance of the LLM, which can be `ChatOpenAI`, `OpenAI`, or other compatible types.
         messages: A list of messages to be used for chat completions.
     """
+
     provider: str = "ChatOpenAI"
     llm: Optional[Union[ChatOpenAI, OpenAI]] = None
     messages: List[Dict[str, str]] = [
@@ -28,7 +29,7 @@ class LLM(BaseModel):
     def __init__(self, **data: Any):
         super().__init__(**data)
         # Prevent passing 'provider' twice by excluding it from **data when calling create_llm
-        llm_kwargs = {k: v for k, v in data.items() if k != 'provider'}
+        llm_kwargs = {k: v for k, v in data.items() if k != "provider"}
         self.llm = LLMFactory.create_llm(self.provider, **llm_kwargs)
 
     class Config:
@@ -43,10 +44,13 @@ class LLM(BaseModel):
         Returns:
             The LLM's response as a string, or None if the provider is not configured for chat completions.
         """
-        if self.provider in ("OpenAI", "TogetherAI"):  # Assuming TogetherAI is a typo or not implemented
+        if self.provider in (
+            "OpenAI",
+            "TogetherAI",
+        ):  # Assuming TogetherAI is a typo or not implemented
             self.messages.append({"role": "user", "content": user_content})
             response = self.llm.chat.completions.create(
-                model=os.environ.get("OPENAI_MODEL_NAME", 'gpt-3.5-turbo'),
+                model=os.environ.get("OPENAI_MODEL_NAME", "gpt-3.5-turbo"),
                 messages=self.messages,
                 # temperature=self.temperature,
                 # max_tokens=self.max_tokens,
@@ -54,12 +58,16 @@ class LLM(BaseModel):
             return response.choices[0].message.content
         return None
 
+
 class LLMFactory:
     """A factory for creating LLM instances based on the provider."""
+
     provider_map: Dict[str, Callable[..., Union[ChatOpenAI, OpenAI]]] = {
         "ChatOpenAI": lambda **kwargs: ChatOpenAI(
             temperature=kwargs.get("temperature", 0.7),
-            model_name=kwargs.get("model", os.getenv("OPENAI_MODEL_NAME", 'gpt-3.5-turbo')),
+            model_name=kwargs.get(
+                "model", os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo")
+            ),
         ),
         "OpenAI": lambda **kwargs: OpenAI(
             api_key=kwargs.get("openai_api_key", os.environ.get("OPENAI_API_KEY")),
@@ -68,7 +76,9 @@ class LLMFactory:
         "TogetherAI": lambda **kwargs: OpenAI(
             # model_name=kwargs.get("model", os.getenv("OPENAI_API_KEY", 'gpt-3.5-turbo')),
             api_key=kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
-            base_url=kwargs.get("openai_api_base", os.getenv("OPENAI_API_BASE_URL", None)),
+            base_url=kwargs.get(
+                "openai_api_base", os.getenv("OPENAI_API_BASE_URL", None)
+            ),
         ),
     }
 
@@ -90,17 +100,18 @@ class LLMFactory:
             raise NotImplementedError(f"LLM provider '{provider}' not implemented.")
         return LLMFactory.provider_map[provider](**kwargs)
 
+
 # %%
 
 
-# import cohere 
+# import cohere
 # co = cohere.Client('c42TJdTqSAxP1Q3xZylQQq9xRnNlAg14AgSEbR2C') # This is your trial API key
-# response = co.summarize( 
+# response = co.summarize(
 #   text='{text}',
 #   length='auto',
 #   format='auto',
 #   model='command',
 #   additional_command='',
 #   temperature=0.3,
-# ) 
+# )
 # print('Summary:', response.summary)

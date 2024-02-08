@@ -1,4 +1,4 @@
-#%%
+# %%
 import os
 
 from sqlalchemy import Column, Integer, String, create_engine
@@ -10,16 +10,17 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 url = URL.create(
     drivername="postgresql",
-    username=os.environ.get('POSTGRES_USERNAME'), #config("DB_USER"),
-    password=os.environ.get('POSTGRES_PASSWORD'), #config("DB_PASSWORD"),
-    host=os.environ.get('POSTGRES_HOST'),
-    database=os.environ.get('POSTGRES_DATABASE'),
-    port=os.environ.get('POSTGRES_PORT')
+    username=os.environ.get("POSTGRES_USERNAME"),  # config("DB_USER"),
+    password=os.environ.get("POSTGRES_PASSWORD"),  # config("DB_PASSWORD"),
+    host=os.environ.get("POSTGRES_HOST"),
+    database=os.environ.get("POSTGRES_DATABASE"),
+    port=os.environ.get("POSTGRES_PORT"),
 )
 
 engine = create_engine(url)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
+
 
 class Conversation(Base):
     __tablename__ = "conversations"
