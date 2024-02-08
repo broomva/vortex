@@ -5,7 +5,7 @@
   "scripts": {
     "fastapi": "python -m uvicorn vortex.api:app --reload",
     "ngrok": "ngrok http 8000",
-    "host-api": "pip install -r requirements.txt && concurrently \"npm run fastapi\" \"npm run ngrok\"",
+    "host-api": "concurrently \"npm run fastapi\" \"npm run ngrok\"",
     "vortex-flows-webserver": "dagster-webserver -h 0.0.0.0 -p 3001",
     "vortex-flows-daemon": "dagster-daemon run",
     "next-dev": "next dev",
