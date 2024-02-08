@@ -1,15 +1,9 @@
 #%%
-import os
 from typing import Optional
 
 from dagster import ConfigurableResource, EnvVar
 from dotenv import load_dotenv
-from langchain import hub
-from langchain.agents import AgentExecutor, create_openai_tools_agent
-from langchain_openai import ChatOpenAI
 from openai import OpenAI
-
-from vortex.ai.tools import tools
 
 load_dotenv()
 
@@ -48,22 +42,5 @@ class OpenAIResource(ConfigurableResource):
             max_tokens=self.max_tokens,
         )
         return response.choices[0].message.content
-
-    def get_agent_response(
-        self, user_content: str, hub_prompt: str = "hwchase17/openai-tools-agent"
-    ):
-        llm = ChatOpenAI(
-            model=self.model,
-            temperature=self.temperature,
-            openai_api_base=self.base_url,
-            openai_api_key=self.api_key,
-        )
-        # Construct the OpenAI Tools agent
-        agent = create_openai_tools_agent(llm, tools, hub_prompt)
-        # Create an agent executor by passing in the agent and tools
-        agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
-        user_input = {"input": user_content}
-        response = agent_executor.invoke(user_input)
-        return response["output"]
 
 # %%
