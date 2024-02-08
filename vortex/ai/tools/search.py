@@ -7,7 +7,7 @@ import requests
 serper_api_key = os.getenv("SERP_API_KEY")
 
 
-def search(query):
+def serper_api_search(query):
     url = "https://google.serper.dev/search"
     payload = json.dumps({"q": query})
     headers = {"X-API-KEY": serper_api_key, "Content-Type": "application/json"}
