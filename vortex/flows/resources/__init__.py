@@ -2,9 +2,9 @@
 from abc import ABC, abstractmethod
 
 # Import all submodules to expose the public API
-from .openai import OpenAIResource
+from .completion import OpenAIResource
+from .orm import SQLAlchemyResource
 from .postgres import PostgresResource
-from .sqlalchemy import SQLAlchemyResource
 
 
 class BaseResource(ABC):

@@ -13,7 +13,26 @@ import os
 from typing import Optional
 
 import psycopg2
-from dagster import ConfigurableResource
+from dagster import ConfigurableResource, EnvVar
+
+# from dagster import (
+#     AssetExecutionContext,
+#     Definitions,
+#     InitResourceContext,
+#     asset,
+#     resource,
+# )
+
+# class FancyDbResource:
+#     def __init__(self, conn_string: str) -> None:
+#         self.conn_string = conn_string
+
+#     def execute(self, query: str) -> None:
+#         ...
+
+# @resource(config_schema={"conn_string": str})
+# def fancy_db_resource(context: InitResourceContext) -> FancyDbResource:
+#     return FancyDbResource(context.resource_config["conn_string"])
 
 
 class PostgresResource(ConfigurableResource):
@@ -34,11 +53,11 @@ class PostgresResource(ConfigurableResource):
 
     """
 
-    database: Optional[str] = os.getenv("POSTGRES_DATABASE")
-    username: Optional[str] = os.getenv("POSTGRES_USERNAME")
-    password: Optional[str] = os.getenv("POSTGRES_PASSWORD")
-    host: Optional[str] = os.getenv("POSTGRES_HOST")
-    port: Optional[str] = os.getenv("POSTGRES_PORT")
+    database: Optional[str] = EnvVar("POSTGRES_DATABASE")
+    username: Optional[str] = EnvVar("POSTGRES_USERNAME")
+    password: Optional[str] = EnvVar("POSTGRES_PASSWORD")
+    host: Optional[str] = EnvVar("POSTGRES_HOST")
+    port: Optional[str] = EnvVar("POSTGRES_PORT")
 
     @contextlib.contextmanager
     def connect(self):

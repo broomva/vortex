@@ -23,3 +23,10 @@ duckduckgo-search
 wikipedia
 mlflow
 sendgrid
+fastapi
+uvicorn
+twilio
+python-decouple
+python-multipart
+pyngrok
+langchain_experimental

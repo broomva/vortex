@@ -2,8 +2,8 @@ from functools import update_wrapper, wraps
 
 from dagster import AssetExecutionContext, MetadataValue, asset
 
-from vortex.api.flows.resources.openai import OpenAIResource
-from vortex.api.flows.resources.postgres import PostgresResource
+from vortex.flows.resources.completion import OpenAIResource
+from vortex.flows.resources.postgres import PostgresResource
 
 
 def postgres_asset(name: str, group_name: str, query: str, params=None, deps=None):
