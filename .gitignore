@@ -14,7 +14,6 @@ dagster_runtime/
 .DS_Store
 .__pycache__
 
-poetry.lock
 
 # Distribution / packaging
 .Python
@@ -206,4 +205,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-yarn.lock
+
+/do_vortex
+/do_vortex.pub
