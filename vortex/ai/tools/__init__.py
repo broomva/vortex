@@ -1,7 +1,7 @@
 # %%
 from dotenv import load_dotenv
 from langchain.agents import Tool, load_tools, tool
-from langchain.tools import WikipediaQueryRun
+from langchain_community.tools import WikipediaQueryRun
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_community.utilities import WikipediaAPIWrapper
 from langchain_core.utils.function_calling import convert_to_openai_function

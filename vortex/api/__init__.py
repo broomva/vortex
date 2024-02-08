@@ -3,6 +3,7 @@ from fastapi import Depends, FastAPI, Form, Request
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from vortex.ai.agents import VortexAgent
 from vortex.ai.agents.utils import logger, send_message
 # Internal imports
 from vortex.api.data_models import Conversation, SessionLocal
@@ -10,6 +11,8 @@ from vortex.api.data_models import Conversation, SessionLocal
 load_dotenv()
 
 app = FastAPI()
+
+agent = VortexAgent()
 
 
 @app.get("/api/check")
@@ -19,7 +22,7 @@ def hello_world():
 
 @app.get("/")
 async def index():
-    return {"msg": "up & running"}
+    return {"msg": "Vortex is Running!"}
 
 
 
@@ -39,7 +42,7 @@ async def reply(request: Request, Body: str = Form(), db: Session = Depends(get_
     print(f"Sending the LangChain response to this number: {whatsapp_number}")
 
     # Get the generated text from the LangChain agent
-    langchain_response = search_wikipedia(Body)
+    langchain_response = agent.get_response(Body)
 
     # Store the conversation in the database
     try:

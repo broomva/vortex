@@ -29,3 +29,4 @@ twilio
 python-decouple
 python-multipart
 pyngrok
+langchain_experimental
