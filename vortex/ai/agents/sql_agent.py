@@ -102,3 +102,5 @@ agent_executor = AgentExecutor(
 #%%
 agent_executor.invoke({"input": "please extract the NER from the article 10"})
 
+
+# %%

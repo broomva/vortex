@@ -1,4 +1,4 @@
-from sample_dag import defs
+from examples.vortex_demo.dags.web_rag import defs
 
 
 def test_def_can_load():
