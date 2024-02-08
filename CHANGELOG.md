@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.0](https://github.com/Broomva/vortex/compare/v0.1.6...v0.2.0) (2024-02-08)
+
+
+### Features
+
+* added vortex agent ([65303bb](https://github.com/Broomva/vortex/commit/65303bbf02e14460cd47757f2d09a13b6a379ec5))
+
+
+### Bug Fixes
+
+* corrected agents ([18e9253](https://github.com/Broomva/vortex/commit/18e9253f57105a851fdcb84bd6756156772a7665))
+* fixed wapp interface with twillio ([9d6d34a](https://github.com/Broomva/vortex/commit/9d6d34a6126516ac429897f75c8ac6cec3460009))
+* minor correction to start command ([12569f3](https://github.com/Broomva/vortex/commit/12569f3106565dcd65efd67fd62721918ea8f7a8))
+* reordered the folder structure and added some baseline scripts for the wapp interface ([10696b5](https://github.com/Broomva/vortex/commit/10696b5152a7e36212a838ba272395d3d6d28cd5))
+* set default twilio number for sandbox env ([2ae30be](https://github.com/Broomva/vortex/commit/2ae30bedafd9d041098b15693ce3eb8761f09912))
+* updated examples ([11c5444](https://github.com/Broomva/vortex/commit/11c5444bcaa14cb7a8516d1ffc0b4291d054a6cc))
+* updated folder structure ([257908d](https://github.com/Broomva/vortex/commit/257908d1ddc9d7b036843c03b1c93c52c084c341))
+* updated llm creation factory ([e207eb5](https://github.com/Broomva/vortex/commit/e207eb57df04a628caa96992f2e578300b4f0033))
+
 ## [0.1.6](https://github.com/Broomva/vortex/compare/v0.1.5...v0.1.6) (2024-02-03)
 
 
