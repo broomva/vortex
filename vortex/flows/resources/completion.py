@@ -2,7 +2,7 @@
 import os
 from typing import Optional
 
-from dagster import ConfigurableResource
+from dagster import ConfigurableResource, EnvVar
 from dotenv import load_dotenv
 from langchain import hub
 from langchain.agents import AgentExecutor, create_openai_tools_agent
@@ -16,12 +16,12 @@ load_dotenv()
 
 class OpenAIResource(ConfigurableResource):
     api_key: Optional[str] = (
-        None or os.getenv("TOGETHER_API_KEY") or os.getenv("OPENAI_API_KEY")
+        None or EnvVar("TOGETHER_API_KEY") or EnvVar("OPENAI_API_KEY")
     )
-    base_url: Optional[str] = os.getenv("OPENAI_API_BASE_URL")
+    base_url: Optional[str] = EnvVar("OPENAI_API_BASE_URL")
     # client: Optional[OpenAI] = None
     model: Optional[str] = (
-        os.getenv("OPENAI_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
+        EnvVar("TOGETHERAI_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
     )
     # respone_model: Optional[BaseModel] = None
     temperature: Optional[float] = 0.8

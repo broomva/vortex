@@ -51,4 +51,4 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.dagster]
-module_name = "examples.vortex_demo.dags.web_rag"
+module_name = "examples.vortex_demo.dags.web_rag_agent"

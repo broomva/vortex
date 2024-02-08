@@ -1,4 +1,4 @@
 locations:
 - code_source:
-    package_name: examples.vortex_demo.dags.web_rag
+    package_name: examples.vortex_demo.dags.web_rag_agent
   location_name: vortex_demo

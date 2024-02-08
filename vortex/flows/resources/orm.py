@@ -3,7 +3,7 @@ import contextlib
 import os
 from typing import Optional
 
-from dagster import ConfigurableResource
+from dagster import ConfigurableResource, EnvVar
 from sqlalchemy import create_engine, text
 
 
@@ -15,7 +15,7 @@ class SQLAlchemyResource(ConfigurableResource):
         url (Optional[str]): The URL of the SQLAlchemy database connection.
     """
 
-    url: Optional[str] = os.getenv("SQLALCHEMY_URL")
+    url: Optional[str] = EnvVar("SQLALCHEMY_URL")
 
     @contextlib.contextmanager
     def connect(self):
