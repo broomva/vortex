@@ -16,7 +16,7 @@ load_dotenv()
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
 auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 client = Client(account_sid, auth_token)
-twilio_number = os.environ.get("TWILIO_NUMBER")
+twilio_number = "+14155238886" or os.environ.get("TWILIO_NUMBER")
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
