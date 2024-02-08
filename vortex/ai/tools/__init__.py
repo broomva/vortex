@@ -65,9 +65,9 @@ tools = [
     get_word_length,
     wikipedia_tool,
     tavily_tool,
-    serper_api_search_tool,
-    scrape_with_bs4_tool,
-    scrape_with_selenuim_tool,
+    # serper_api_search_tool,
+    # scrape_with_bs4_tool,
+    # scrape_with_selenuim_tool,
     repl_tool,
 ]
 
