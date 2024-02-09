@@ -1,4 +1,4 @@
-#%%
+# %%
 import base64
 import logging
 import os
@@ -14,8 +14,7 @@ from sqlalchemy.orm import Session
 from twilio.rest import Client
 
 from vortex.ai.agents import VortexAgent
-from vortex.api.data_models import (ChatsHistory, Conversation, SessionLocal,
-                                    get_db)
+from vortex.api.data_models import ChatsHistory, Conversation, SessionLocal, get_db
 
 load_dotenv()
 
@@ -32,18 +31,19 @@ twilio_number = "+14155238886" or os.environ.get("TWILIO_NUMBER")
 
 agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
+
 def get_or_create_agent(phone_number: str, db) -> VortexAgent:
     agent = agents.get(phone_number)
     chat_history = get_chat_history(db, phone_number)
-    if agent is not None and chat_history: # Same session stil kept
-        print(f'Using existing agent {agent}')
+    if agent is not None and chat_history:  # Same session stil kept
+        print(f"Using existing agent {agent}")
         ...
-    elif agent is None and chat_history: # New session but existing user
+    elif agent is None and chat_history:  # New session but existing user
         agent = VortexAgent(context=chat_history)  # Initialize a new agent instance
-        print(f'using reloaded agent with history {chat_history}')
+        print(f"using reloaded agent with history {chat_history}")
     elif agent is None and not chat_history:
         agent = VortexAgent()
-        print('using a new agent')
+        print("using a new agent")
     agents[phone_number] = agent
     return agent
 
@@ -90,7 +90,7 @@ def get_chat_history(db_session, phone_number: str) -> list:
     chat_history = str(history[0])
     print(chat_history)
     loaded = pickle.loads(chat_history)
-    print(f'loaded history {loaded}')
+    print(f"loaded history {loaded}")
     return loaded
 
 
@@ -126,5 +126,6 @@ async def handle_wapp_message(
     # Lastly, send message back to user
     send_message(whatsapp_number, langchain_response)
     return {"response": langchain_response}
+
 
 # %%

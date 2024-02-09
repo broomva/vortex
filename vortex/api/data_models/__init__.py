@@ -2,8 +2,7 @@
 import os
 from datetime import datetime
 
-from sqlalchemy import (JSON, Column, DateTime, Integer, String, Text,
-                        create_engine)
+from sqlalchemy import JSON, Column, DateTime, Integer, String, Text, create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -32,14 +31,17 @@ class Conversation(Base):
     response = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
 
+
 class ChatsHistory(Base):
-    __tablename__ = 'chats_history'
+    __tablename__ = "chats_history"
     # id = Column(Integer, primary_key=True, index=True)
     sender = Column(String, primary_key=True, index=True)
     history = Column(Text)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
+
 Base.metadata.create_all(engine)
+
 
 def get_db():
     try:
@@ -47,4 +49,6 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
 # %%
