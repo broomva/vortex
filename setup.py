@@ -60,7 +60,7 @@ from setuptools import find_namespace_packages, find_packages
 
 setuptools.setup(
     name="vortex-python",
-    version="0.2.0",
+    version="0.2.1",
     packages=find_packages(exclude=["vortex_tests"]),
     author="Carlos D. Escobar-Valbuena",
     author_email="carlosdavidescobar@gmail.com",

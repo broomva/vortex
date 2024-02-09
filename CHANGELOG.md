@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.1](https://github.com/Broomva/vortex/compare/v0.2.0...v0.2.1) (2024-02-09)
+
+
+### Bug Fixes
+
+* added user context storage ([8ef6ed0](https://github.com/Broomva/vortex/commit/8ef6ed0316e3e548e776e6fc6b17570243681e96))
+* corrected poetry install and fixed pickling of chat history ([bba6d96](https://github.com/Broomva/vortex/commit/bba6d960bd39ade02cc9fbac74b9233c619a64c6))
+* corrected twilio module ([2f41de5](https://github.com/Broomva/vortex/commit/2f41de5a4cc518d90bde215f19eebf672ff3af77))
+* disabled scrappign tools from default agent ([ebb9530](https://github.com/Broomva/vortex/commit/ebb95303862ce76a12dce371f0d0089c5cd01692))
+* fixed deployment scripts in package.json ([7feba6d](https://github.com/Broomva/vortex/commit/7feba6d98f9800b48c00e9af18291e9da16c62c8))
+* testint render deploy ([be6592b](https://github.com/Broomva/vortex/commit/be6592bed6f827931c5f554b3c3e30000ea55b74))
+* updated poetry to use python 3.9.8 ([a8c736d](https://github.com/Broomva/vortex/commit/a8c736dac11fe2943f3e516ec85e4aa0504bf79e))
+* updated twilio wapp modules ([037211f](https://github.com/Broomva/vortex/commit/037211f432423995ef6b42f96360b44d6d87a598))
+
 ## [0.2.0](https://github.com/Broomva/vortex/compare/v0.1.6...v0.2.0) (2024-02-08)
 
 
