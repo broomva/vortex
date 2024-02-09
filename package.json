@@ -8,10 +8,11 @@
     "host-api": "concurrently \"npm run fastapi\" \"npm run ngrok\"",
     "vortex-flows-webserver": "dagster-webserver -h 0.0.0.0 -p 3001",
     "vortex-flows-daemon": "dagster-daemon run",
+    "vortex-flows": "concurrently \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
     "next-dev": "next dev",
     "next-start": "next start",
-    "dev": "pip install . && concurrently \"npm run next-dev\" \"npm run host-api\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
-    "start": "pip install . && concurrently \"npm run next-start\" \"npm run host-api\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
+    "dev": "pip install . && concurrently \"npm run next-dev\" \"npm run host-api\" \"npm run vortex-flows\" ",
+    "start": "pip install . && concurrently \"npm run next-start\" \"npm run host-api\" \"npm run vortex-flows\"",
     "build": "next build && pip install .",
     "lint": "next lint && black ."
   },
