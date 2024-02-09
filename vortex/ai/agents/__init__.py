@@ -1,9 +1,9 @@
 # %%
 from langchain.agents import AgentExecutor
-from langchain.agents.format_scratchpad.openai_tools import (
-    format_to_openai_tool_messages,
-)
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
+from langchain.agents.format_scratchpad.openai_tools import \
+    format_to_openai_tool_messages
+from langchain.agents.output_parsers.openai_tools import \
+    OpenAIToolsAgentOutputParser
 from langchain.prompts import MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -40,12 +40,13 @@ class VortexAgent:
         tools: list = tools,
         hub_prompt: str = "hwchase17/openai-tools-agent",
         agent_type="vortex_tools_agent",
+        context: list = [] # represents the chat history, can be pulled from a db
     ):
         self.llm: LLM = llm
         self.tools: list = tools
         self.hub_prompt: str = hub_prompt
         self.agent_type: str = agent_type
-        self.chat_history: list = []
+        self.chat_history: list = context
         self.llm_with_tools = self.llm.bind_tools(self.tools)
         self.prompt = ChatPromptTemplate.from_messages(
             [

@@ -1,7 +1,8 @@
 # %%
 import os
+from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, DateTime, Integer, String, Text, create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -24,12 +25,19 @@ Base = declarative_base()
 
 class Conversation(Base):
     __tablename__ = "conversations"
-
     id = Column(Integer, primary_key=True, index=True)
     sender = Column(String)
     message = Column(String)
     response = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 Base.metadata.create_all(engine)
+
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
 # %%
