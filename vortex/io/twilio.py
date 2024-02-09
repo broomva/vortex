@@ -5,6 +5,7 @@ import logging
 import os
 import pickle
 import weakref
+from datetime import datetime
 from typing import Dict
 
 from dotenv import load_dotenv
@@ -15,10 +16,11 @@ from sqlalchemy.orm import Session
 from twilio.rest import Client
 
 from vortex.ai.agents import VortexAgent
-from vortex.api.data_models import ChatsHistory, Conversation, SessionLocal, get_db
+from vortex.api.data_models import (ChatsHistory, Conversation, SessionLocal,
+                                    get_db)
 
 # db = SessionLocal()
-# phone_number =
+# phone_number = ''
 # agent = get_or_create_agent(phone_number, db)
 # agent.get_response('hi there, my name is carlos')
 # agent_history = agent.chat_history
@@ -43,18 +45,20 @@ agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
 def get_or_create_agent(phone_number: str, db) -> VortexAgent:
     agent = agents.get(phone_number)
-    print(f"Agent: {agent}")
-    chat_history = get_chat_history(db, phone_number)
+    try:
+        chat_history = get_chat_history(db, phone_number)
+    except Exception as e:
+        logger.error(f"Error getting chat history for {phone_number}: {e}")
+        chat_history = []
     print(f"Chat history: {chat_history}")
     if agent is not None and chat_history:  # Same session stil kept
         print(f"Using existing agent {agent}")
-        ...
     elif agent is None and chat_history:  # New session but existing user
+        print(f"Using reloaded agent with history {chat_history}")
         agent = VortexAgent(context=chat_history)  # Initialize a new agent instance
-        print(f"using reloaded agent with history {chat_history}")
     elif agent is None and not chat_history:
+        print("Using a new agent")
         agent = VortexAgent()
-        print("using a new agent")
     agents[phone_number] = agent
     return agent
 
@@ -76,16 +80,20 @@ def store_chat_history(whatsapp_number, agent_history, db):
         .values(
             sender=whatsapp_number,
             history=str(history),
+            updated_at=datetime.utcnow()  # Explicitly set updated_at on insert
         )
         .on_conflict_do_update(
             index_elements=["sender"],  # Specify the conflict target
-            set_={"history": history},  # Update these fields upon conflict
+            set_={
+                "history": str(history),  # Update the history field upon conflict
+                "updated_at": datetime.utcnow()  # Update the updated_at field upon conflict
+            },
         )
     )
     # Execute the upsert
     db.execute(stmt)
     db.commit()
-    logger.info(f"Upsert chat history for user {whatsapp_number}")
+    logger.info(f"Upsert chat history for user {whatsapp_number} with statement {stmt}")
 
 
 def get_chat_history(db_session, phone_number: str) -> list:
