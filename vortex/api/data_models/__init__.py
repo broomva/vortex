@@ -1,10 +1,13 @@
 # %%
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 
 from sqlalchemy import JSON, Column, DateTime, Integer, String, Text, create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import declarative_base, sessionmaker
+
+load_dotenv()
 
 # from decouple import config
 

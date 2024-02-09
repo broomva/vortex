@@ -10,10 +10,10 @@
     "vortex-flows-daemon": "dagster-daemon run",
     "next-dev": "next dev",
     "next-start": "next start",
-    "dev": "pip install -r requirements.txt && concurrently \"npm run next-dev\" \"npm run host-api\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
-    "start": "pip install -r requirements.txt && concurrently \"npm run next-start\" \"npm run host-api\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
-    "build": "next build",
-    "lint": "next lint"
+    "dev": "pip install . && concurrently \"npm run next-dev\" \"npm run host-api\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
+    "start": "pip install . && concurrently \"npm run next-start\" \"npm run host-api\" \"npm run vortex-flows-webserver\" \"npm run vortex-flows-daemon\"",
+    "build": "next build && pip install .",
+    "lint": "next lint && black ."
   },
   "dependencies": {
     "@types/node": "20.2.4",
