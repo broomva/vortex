@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "vortex"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9.8"
 # mlflow = "^2.4.1"
 # pydantic = "^1.10.9"
 # python-dotenv = "^1.0.0"
