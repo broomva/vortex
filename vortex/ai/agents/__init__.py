@@ -1,9 +1,9 @@
 # %%
 from langchain.agents import AgentExecutor
-from langchain.agents.format_scratchpad.openai_tools import (
-    format_to_openai_tool_messages,
-)
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
+from langchain.agents.format_scratchpad.openai_tools import \
+    format_to_openai_tool_messages
+from langchain.agents.output_parsers.openai_tools import \
+    OpenAIToolsAgentOutputParser
 from langchain.prompts import MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -99,3 +99,7 @@ class VortexAgent:
 
 
 # %%
+
+
+class VortexSession:
+    ...

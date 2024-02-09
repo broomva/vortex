@@ -1,4 +1,5 @@
 # %%
+import ast
 import base64
 import logging
 import os
@@ -14,7 +15,16 @@ from sqlalchemy.orm import Session
 from twilio.rest import Client
 
 from vortex.ai.agents import VortexAgent
-from vortex.api.data_models import ChatsHistory, Conversation, SessionLocal, get_db
+from vortex.api.data_models import (ChatsHistory, Conversation, SessionLocal,
+                                    get_db)
+
+# db = SessionLocal()
+# phone_number = 
+# agent = get_or_create_agent(phone_number, db)
+# agent.get_response('hi there, my name is carlos')
+# agent_history = agent.chat_history
+# history = pickle.dumps(agent_history)
+# store_chat_history(phone_number, agent_history, db)
 
 load_dotenv()
 
@@ -34,7 +44,9 @@ agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
 def get_or_create_agent(phone_number: str, db) -> VortexAgent:
     agent = agents.get(phone_number)
+    print(f"Agent: {agent}")
     chat_history = get_chat_history(db, phone_number)
+    print(f"Chat history: {chat_history}")
     if agent is not None and chat_history:  # Same session stil kept
         print(f"Using existing agent {agent}")
         ...
@@ -64,7 +76,7 @@ def store_chat_history(whatsapp_number, agent_history, db):
         insert(ChatsHistory)
         .values(
             sender=whatsapp_number,
-            history=history,
+            history=str(history),
         )
         .on_conflict_do_update(
             index_elements=["sender"],  # Specify the conflict target
@@ -83,13 +95,12 @@ def get_chat_history(db_session, phone_number: str) -> list:
         .filter(ChatsHistory.sender == phone_number)
         .order_by(ChatsHistory.updated_at.asc())
         .all()
-        or []
-    )
+    ) or []
     if not history:
         return []
-    chat_history = str(history[0])
+    chat_history = history[0].history
     print(chat_history)
-    loaded = pickle.loads(chat_history)
+    loaded = pickle.loads(ast.literal_eval(chat_history))
     print(f"loaded history {loaded}")
     return loaded
 
