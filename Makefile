@@ -36,3 +36,6 @@ docker_run:
 
 deploy_service:
 	dagster-webserver -h 0.0.0.0 -p 3001 && dagster-daemon run  
+
+deploy_api:
+	python -m uvicorn vortex.api:app --reload & ngrok http 8000
