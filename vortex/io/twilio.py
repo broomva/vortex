@@ -16,8 +16,7 @@ from sqlalchemy.orm import Session
 from twilio.rest import Client
 
 from vortex.ai.agents import VortexAgent
-from vortex.api.data_models import (ChatsHistory, Conversation, SessionLocal,
-                                    get_db)
+from vortex.api.data_models import ChatsHistory, Conversation, SessionLocal, get_db
 
 # db = SessionLocal()
 # phone_number = ''
