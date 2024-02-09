@@ -16,8 +16,7 @@ from sqlalchemy.orm import Session
 from twilio.rest import Client
 
 from vortex.ai.agents import VortexAgent
-from vortex.api.data_models import (ChatsHistory, Conversation, SessionLocal,
-                                    get_db)
+from vortex.api.data_models import ChatsHistory, Conversation, SessionLocal, get_db
 
 # db = SessionLocal()
 # phone_number = ''
@@ -80,13 +79,13 @@ def store_chat_history(whatsapp_number, agent_history, db):
         .values(
             sender=whatsapp_number,
             history=str(history),
-            updated_at=datetime.utcnow()  # Explicitly set updated_at on insert
+            updated_at=datetime.utcnow(),  # Explicitly set updated_at on insert
         )
         .on_conflict_do_update(
             index_elements=["sender"],  # Specify the conflict target
             set_={
                 "history": str(history),  # Update the history field upon conflict
-                "updated_at": datetime.utcnow()  # Update the updated_at field upon conflict
+                "updated_at": datetime.utcnow(),  # Update the updated_at field upon conflict
             },
         )
     )
