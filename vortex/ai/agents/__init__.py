@@ -1,9 +1,9 @@
 # %%
 from langchain.agents import AgentExecutor
-from langchain.agents.format_scratchpad.openai_tools import (
-    format_to_openai_tool_messages,
-)
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
+from langchain.agents.format_scratchpad.openai_tools import \
+    format_to_openai_tool_messages
+from langchain.agents.output_parsers.openai_tools import \
+    OpenAIToolsAgentOutputParser
 from langchain.prompts import MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -39,7 +39,7 @@ class VortexAgent:
         llm: LLM = LLM().llm,
         tools: list = tools,
         hub_prompt: str = "hwchase17/openai-tools-agent",
-        agent_type="vortex_tools_agent",
+        agent_type="vortex_wapp_tools_agent",
         context: list = [],  # represents the chat history, can be pulled from a db
     ):
         self.llm: LLM = llm
@@ -55,6 +55,7 @@ class VortexAgent:
                     "You are very powerful assistant.",
                 ),
                 MessagesPlaceholder(variable_name=MEMORY_KEY),
+                # AIMessage(content=SQL_FUNCTIONS_SUFFIX),
                 ("user", "{input}"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
@@ -67,7 +68,7 @@ class VortexAgent:
                 ),
                 "chat_history": lambda x: x["chat_history"],
             }
-            | self.prompt
+            | self.prompt or self.hub_prompt
             | self.llm_with_tools
             | OpenAIToolsAgentOutputParser()
         )
@@ -99,6 +100,90 @@ class VortexAgent:
 
 
 # %%
+import ast
+import pickle
+import weakref
+from datetime import datetime
+from typing import Dict
+
+from pydantic import BaseModel
+from sqlalchemy.dialects.postgresql import insert
+
+from vortex.ai.agents import VortexAgent
+from vortex.api.datamodels.wapp import ChatsHistory, Conversation
 
 
-class VortexSession: ...
+class VortexSession:
+    
+    def __init__(self, *args, **kwargs):
+        self.agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
+
+    def get_or_create_agent(self, phone_number: str, db) -> VortexAgent:
+        agent = self.agents.get(phone_number)
+        try:
+            chat_history = self.get_chat_history(db, phone_number)
+        except Exception as e:
+            print(f"Error getting chat history for {phone_number}: {e}")
+            chat_history = []
+        print(f"Chat history: {chat_history}")
+        if agent is not None and chat_history:  # Same session stil kept
+            print(f"Using existing agent {agent}")
+        elif agent is None and chat_history:  # New session but existing user
+            print(f"Using reloaded agent with history {chat_history}")
+            agent = VortexAgent(context=chat_history)  # Initialize a new agent instance
+        elif agent is None and not chat_history:
+            print("Using a new agent")
+            agent = VortexAgent()
+        self.agents[phone_number] = agent
+        return agent
+
+
+    def store_message(self, whatsapp_number, Body, langchain_response, db):
+        conversation = Conversation(
+            sender=whatsapp_number, message=Body, response=langchain_response
+        )
+        db.add(conversation)
+        db.commit()
+        print(f"Conversation #{conversation.id} stored in database")
+
+
+    def store_chat_history(self, whatsapp_number, agent_history, db):
+        history = pickle.dumps(agent_history)
+        # Upsert statement
+        stmt = (
+            insert(ChatsHistory)
+            .values(
+                sender=whatsapp_number,
+                history=str(history),
+                updated_at=datetime.utcnow(),  # Explicitly set updated_at on insert
+            )
+            .on_conflict_do_update(
+                index_elements=["sender"],  # Specify the conflict target
+                set_={
+                    "history": str(history),  # Update the history field upon conflict
+                    "updated_at": datetime.utcnow(),  # Update the updated_at field upon conflict
+                },
+            )
+        )
+        # Execute the upsert
+        db.execute(stmt)
+        db.commit()
+        print(f"Upsert chat history for user {whatsapp_number} with statement {stmt}")
+
+
+    def get_chat_history(self, db_session, phone_number: str) -> list:
+        history = (
+            db_session.query(ChatsHistory)
+            .filter(ChatsHistory.sender == phone_number)
+            .order_by(ChatsHistory.updated_at.asc())
+            .all()
+        ) or []
+        if not history:
+            return []
+        chat_history = history[0].history
+        print(chat_history)
+        loaded = pickle.loads(ast.literal_eval(chat_history))
+        print(f"loaded history {loaded}")
+        return loaded
+
+

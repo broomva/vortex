@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI, Form, Request
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from vortex.api.data_models import get_db
+from vortex.api.datamodels import get_db
 from vortex.io.twilio import handle_wapp_message
 
 load_dotenv()
