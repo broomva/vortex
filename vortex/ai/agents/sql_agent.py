@@ -18,6 +18,36 @@ db = SQLDatabase.from_uri(os.environ.get("SQLALCHEMY_URL"))
 llm = LLM().llm
 agent_executor = create_sql_agent(llm, db=db, agent_type="openai-tools", verbose=True)
 
+
+
+  agent = RunnableMultiActionAgent(
+    runnable=create_openai_tools_agent(llm, tools, prompt),
+    input_keys_arg=["input"],
+    return_keys_arg=["output"],
+)
+
+    )
+
+else:
+    raise ValueError(
+        f"Agent type {agent_type} not supported at the moment. Must be one of "
+        "'openai-tools', 'openai-functions', or 'zero-shot-react-description'."
+    )
+
+return AgentExecutor(
+    name="SQL Agent Executor",
+    agent=agent,
+    tools=tools,
+    callback_manager=callback_manager,
+    verbose=verbose,
+    max_iterations=max_iterations,
+    max_execution_time=max_execution_time,
+    early_stopping_method=early_stopping_method,
+    **(agent_executor_kwargs or {}),
+)
+
+
+
 # vortex_oai_tools = functions = [convert_to_openai_function(t) for t in vortex_tools]
 
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)

@@ -1,17 +1,29 @@
 # %%
+import ast
+import os
+import pickle
+import weakref
+from datetime import datetime
+from typing import Dict
+
 from langchain.agents import AgentExecutor
 from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
 from langchain.prompts import MessagesPlaceholder
+from langchain.sql_database import SQLDatabase
+from langchain_community.agent_toolkits import (SQLDatabaseToolkit,
+                                                create_sql_agent)
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from pydantic import BaseModel
+from sqlalchemy.dialects.postgresql import insert
 
 from vortex.ai.llm import LLM
+from vortex.ai.prompts import vortex_prompt
 from vortex.ai.tools import tools
-
-MEMORY_KEY = "chat_history"
+from vortex.api.datamodels.wapp import ChatsHistory, Conversation
 
 
 class VortexAgent:
@@ -48,18 +60,8 @@ class VortexAgent:
         self.agent_type: str = agent_type
         self.chat_history: list = context
         self.llm_with_tools = self.llm.bind_tools(self.tools)
-        self.prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    "You are very powerful assistant.",
-                ),
-                MessagesPlaceholder(variable_name=MEMORY_KEY),
-                # AIMessage(content=SQL_FUNCTIONS_SUFFIX),
-                ("user", "{input}"),
-                MessagesPlaceholder(variable_name="agent_scratchpad"),
-            ]
-        )
+        self.prompt = vortex_prompt
+        self.db = SQLDatabase.from_uri(os.environ.get("SQLALCHEMY_URL"))
         self.agent = (
             {
                 "input": lambda x: x["input"],
@@ -68,9 +70,8 @@ class VortexAgent:
                 ),
                 "chat_history": lambda x: x["chat_history"],
             }
-            | self.prompt or self.hub_prompt
-            | self.llm_with_tools
-            | OpenAIToolsAgentOutputParser()
+            | self.prompt
+            or self.hub_prompt | self.llm_with_tools | OpenAIToolsAgentOutputParser()
         )
         self.agent_executor = AgentExecutor(
             agent=self.agent, tools=self.tools, verbose=True
@@ -99,22 +100,8 @@ class VortexAgent:
         return response["output"]
 
 
-# %%
-import ast
-import pickle
-import weakref
-from datetime import datetime
-from typing import Dict
-
-from pydantic import BaseModel
-from sqlalchemy.dialects.postgresql import insert
-
-from vortex.ai.agents import VortexAgent
-from vortex.api.datamodels.wapp import ChatsHistory, Conversation
-
-
 class VortexSession:
-    
+
     def __init__(self, *args, **kwargs):
         self.agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
@@ -126,17 +113,19 @@ class VortexSession:
             print(f"Error getting chat history for {phone_number}: {e}")
             chat_history = []
         print(f"Chat history: {chat_history}")
-        if agent is not None and chat_history:  # Same session stil kept
-            print(f"Using existing agent {agent}")
-        elif agent is None and chat_history:  # New session but existing user
-            print(f"Using reloaded agent with history {chat_history}")
-            agent = VortexAgent(context=chat_history)  # Initialize a new agent instance
-        elif agent is None and not chat_history:
-            print("Using a new agent")
-            agent = VortexAgent()
+
+        match (agent is not None, bool(chat_history)):
+            case (True, True):
+                print(f"Using existing agent {agent}")
+            case (False, True):
+                print(f"Using reloaded agent with history {chat_history}")
+                agent = VortexAgent(context=chat_history)  # Initialize a new agent instance
+            case (False, False):
+                print("Using a new agent")
+                agent = VortexAgent()
+
         self.agents[phone_number] = agent
         return agent
-
 
     def store_message(self, whatsapp_number, Body, langchain_response, db):
         conversation = Conversation(
@@ -145,7 +134,6 @@ class VortexSession:
         db.add(conversation)
         db.commit()
         print(f"Conversation #{conversation.id} stored in database")
-
 
     def store_chat_history(self, whatsapp_number, agent_history, db):
         history = pickle.dumps(agent_history)
@@ -170,7 +158,6 @@ class VortexSession:
         db.commit()
         print(f"Upsert chat history for user {whatsapp_number} with statement {stmt}")
 
-
     def get_chat_history(self, db_session, phone_number: str) -> list:
         history = (
             db_session.query(ChatsHistory)
@@ -187,3 +174,4 @@ class VortexSession:
         return loaded
 
 
+# %%
