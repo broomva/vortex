@@ -7,7 +7,7 @@ const flows = () => {
                 <title>Vortex Flows Embeded</title>
             </Head>
             <iframe
-                src="https://broomva.dagster.cloud/prod/"
+                src="https://vortex-flows.brooma.tech/"
                 style={{
                     position: 'absolute',
                     top: 0,
