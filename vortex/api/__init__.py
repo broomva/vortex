@@ -23,5 +23,7 @@ async def index():
 
 @app.post("/message")
 async def reply(request: Request, Body: str = Form(), db: Session = Depends(get_db)):
+    print(Body)
+    print(request)
     await handle_wapp_message(request, Body, db)
     return ""

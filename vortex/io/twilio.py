@@ -50,13 +50,15 @@ async def handle_wapp_message(
     request: Request, Body: str = Form(), db: Session = Depends(get_db)
 ):
     # Extract the phone number from the incoming webhook request
-    raw_data = await request.form()
-    form_data = wapp.TwilioRequest(**raw_data)
-    whatsapp_number = form_data.phone_number
+    # raw_data = await request.form()
+    # form_data = wapp.TwilioRequest(**raw_data)
+    # whatsapp_number = form_data.phone_number
+    form_data = await request.form()
+    whatsapp_number = form_data["From"].split("whatsapp:")[-1]
     print(f"Sending the LangChain response to this number: {whatsapp_number}")
     agent = vortex_session.get_or_create_agent(whatsapp_number, db)
     # Get the generated text from the LangChain agent
-    langchain_response = agent.get_response(Body)
+    langchain_response = agent.get_response(f"user_id: {whatsapp_number}, user_request: {Body}")
     # Store the conversation in the database
     try:
         vortex_session.store_message(whatsapp_number, Body, langchain_response, db)
