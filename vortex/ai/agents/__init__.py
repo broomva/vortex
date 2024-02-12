@@ -68,26 +68,6 @@ class VortexAgent:
         self.prompt = vortex_prompt.partial(**self.context)
         self.sql_tools = self.toolkit.get_tools()
 
-        # self.llm_with_tools = self.llm.bind_tools(self.tools)
-        # self.agent = (
-        #     {
-        #         "input": lambda x: x["input"],
-        #         "agent_scratchpad": lambda x: format_to_openai_tool_messages(
-        #             x["intermediate_steps"]
-        #         ),
-        #         "chat_history": lambda x: x["chat_history"],
-        #     }
-        #     | self.prompt
-        #     or self.hub_prompt | self.llm_with_tools | OpenAIToolsAgentOutputParser()
-        # )
-
-        # self.agent_executor = AgentExecutor(
-        #     name="Vortex Chat Agent Executor",
-        #     agent=self.agent,
-        #     tools=self.tools,# + self.sql_tools,
-        #     verbose=True,
-        # )
-
         self.llm_with_tools = self.llm.bind_tools(self.tools + self.sql_tools)
         self.agent = (
             {
@@ -134,30 +114,6 @@ class VortexSession:
         self,
     ):
         self.agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
-
-    # def get_or_create_agent(self, phone_number: str, db) -> VortexAgent:
-    #     agent = self.agents.get(phone_number)
-    #     try:
-    #         chat_history = self.get_chat_history(db, phone_number)
-    #     except Exception as e:
-    #         print(f"Error getting chat history for {phone_number}: {e}")
-    #         chat_history = []
-    #     print(f"Chat history: {chat_history}")
-
-    #     match (agent is not None, bool(chat_history)):
-    #         case (True, True):
-    #             print(f"Using existing agent {agent}")
-    #         case (False, True):
-    #             print(f"Using reloaded agent with history {chat_history}")
-    #             agent = VortexAgent(
-    #                 context=chat_history
-    #             )  # Initialize a new agent instance
-    #         case (False, False):
-    #             print("Using a new agent")
-    #             agent = VortexAgent()
-
-    #     self.agents[phone_number] = agent
-    #     return agent
 
     def get_or_create_agent(self, phone_number: str, db) -> VortexAgent:
         agent = self.agents.get(phone_number)
