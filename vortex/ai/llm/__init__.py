@@ -99,19 +99,3 @@ class LLMFactory:
         if provider not in LLMFactory.provider_map:
             raise NotImplementedError(f"LLM provider '{provider}' not implemented.")
         return LLMFactory.provider_map[provider](**kwargs)
-
-
-# %%
-
-
-# import cohere
-# co = cohere.Client('c42TJdTqSAxP1Q3xZylQQq9xRnNlAg14AgSEbR2C') # This is your trial API key
-# response = co.summarize(
-#   text='{text}',
-#   length='auto',
-#   format='auto',
-#   model='command',
-#   additional_command='',
-#   temperature=0.3,
-# )
-# print('Summary:', response.summary)

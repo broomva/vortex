@@ -18,7 +18,7 @@ def hello_world():
 
 @app.get("/")
 async def index():
-    return {"msg": "Vortex is Running!"}
+    return {"message": "Vortex is Running!"}
 
 
 @app.post("/message")

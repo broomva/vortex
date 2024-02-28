@@ -50,6 +50,8 @@ When your reasoning leads to using the SQL database to connect to it, you should
 
 You dont need to run any SQL query or check for information on the database. Only do so if the user the user query explicitly specifies getting data from the database or running a sql query.
 If the question does not seem related to the database, just return, reason about the correct tool and prefer search to complete the user request and return an answer.
+
+Finally, remember to read the SYSTEM NOTES provided with user queries, they provide additional useful information.
 """
 
 VORTEX_SYSTEM_PROMPT_FUNCTIONS_SUFFIX = """If the user query specifies getting data from the database or running a sql query, only when you need to run any SQL query using the sql tool, you should look at the tables in the database to see what you can query.  Then you should query the schema of the most relevant tables."""

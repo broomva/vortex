@@ -115,12 +115,12 @@ class VortexSession:
     ):
         self.agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
-    def get_or_create_agent(self, phone_number: str, db) -> VortexAgent:
-        agent = self.agents.get(phone_number)
+    def get_or_create_agent(self, user_id: str, db) -> VortexAgent:
+        agent = self.agents.get(user_id)
         try:
-            chat_history = self.get_chat_history(db, phone_number)
+            chat_history = self.get_chat_history(db, user_id)
         except Exception as e:
-            print(f"Error getting chat history for {phone_number}: {e}")
+            print(f"Error getting chat history for {user_id}: {e}")
             chat_history = []
         print(f"Chat history: {chat_history}")
         if agent is not None and chat_history:  # Same session stil kept
@@ -131,24 +131,24 @@ class VortexSession:
         elif agent is None and not chat_history:
             print("Using a new agent")
             agent = VortexAgent()
-        self.agents[phone_number] = agent
+        self.agents[user_id] = agent
         return agent
 
-    def store_message(self, whatsapp_number, Body, langchain_response, db):
+    def store_message(self, user_id, Body, langchain_response, db):
         conversation = Conversation(
-            sender=whatsapp_number, message=Body, response=langchain_response
+            sender=user_id, message=Body, response=langchain_response
         )
         db.add(conversation)
         db.commit()
         print(f"Conversation #{conversation.id} stored in database")
 
-    def store_chat_history(self, whatsapp_number, agent_history, db):
+    def store_chat_history(self, user_id, agent_history, db):
         history = pickle.dumps(agent_history)
         # Upsert statement
         stmt = (
             insert(ChatsHistory)
             .values(
-                sender=whatsapp_number,
+                sender=user_id,
                 history=str(history),
                 updated_at=datetime.utcnow(),  # Explicitly set updated_at on insert
             )
@@ -163,12 +163,12 @@ class VortexSession:
         # Execute the upsert
         db.execute(stmt)
         db.commit()
-        print(f"Upsert chat history for user {whatsapp_number} with statement {stmt}")
+        print(f"Upsert chat history for user {user_id} with statement {stmt}")
 
-    def get_chat_history(self, db_session, phone_number: str) -> list:
+    def get_chat_history(self, db_session, user_id: str) -> list:
         history = (
             db_session.query(ChatsHistory)
-            .filter(ChatsHistory.sender == phone_number)
+            .filter(ChatsHistory.sender == user_id)
             .order_by(ChatsHistory.updated_at.asc())
             .all()
         ) or []
