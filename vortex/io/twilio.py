@@ -8,15 +8,7 @@ from sqlalchemy.orm import Session
 from twilio.rest import Client
 
 from vortex.ai.agents import VortexSession
-from vortex.api.datamodels import get_db, wapp
-
-# db = SessionLocal()
-# phone_number = ''
-# agent = get_or_create_agent(phone_number, db)
-# agent.get_response('hi there, my name is carlos')
-# agent_history = agent.chat_history
-# history = pickle.dumps(agent_history)
-# store_chat_history(phone_number, agent_history, db)
+from vortex.datamodels import get_db, wapp
 
 load_dotenv()
 

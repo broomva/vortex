@@ -22,8 +22,9 @@ from sqlalchemy.dialects.postgresql import insert
 
 from vortex.ai.llm import LLM
 from vortex.ai.prompts import vortex_prompt
+from vortex.ai.router import semantic_layer
 from vortex.ai.tools import tools as vortex_tools
-from vortex.api.datamodels.wapp import ChatsHistory, Conversation
+from vortex.datamodels.wapp import ChatsHistory, Conversation
 
 
 class VortexAgent:
@@ -96,8 +97,9 @@ class VortexAgent:
             str: The response from the agent.
 
         """
+        routed_content = semantic_layer(user_content)
         response = self.agent_executor.invoke(
-            {"input": user_content, "chat_history": self.chat_history}
+            {"input": routed_content, "chat_history": self.chat_history}
         )
         self.chat_history.extend(
             [

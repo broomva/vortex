@@ -50,7 +50,7 @@ class LLM(BaseModel):
         ):  # Assuming TogetherAI is a typo or not implemented
             self.messages.append({"role": "user", "content": user_content})
             response = self.llm.chat.completions.create(
-                model=os.environ.get("OPENAI_MODEL_NAME", "gpt-3.5-turbo"),
+                model=os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo-0125"),
                 messages=self.messages,
                 # temperature=self.temperature,
                 # max_tokens=self.max_tokens,
@@ -66,7 +66,7 @@ class LLMFactory:
         "ChatOpenAI": lambda **kwargs: ChatOpenAI(
             temperature=kwargs.get("temperature", 0.7),
             model_name=kwargs.get(
-                "model", os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo")
+                "model", os.getenv("OPENAI_MODEL", "gpt-3.5-turbo-0125")
             ),
         ),
         "OpenAI": lambda **kwargs: OpenAI(

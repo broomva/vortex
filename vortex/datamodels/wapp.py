@@ -3,7 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel
 from sqlalchemy import Column, DateTime, Integer, String, Text
 
-from vortex.api.datamodels import Base, engine
+from vortex.datamodels import Base, engine
 
 Base.metadata.create_all(engine)
 
