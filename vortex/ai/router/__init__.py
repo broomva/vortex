@@ -46,7 +46,9 @@ class RouteManager:
         strategy = self.response_strategies.get(route.name)
         if strategy:
             return strategy.execute()
-        return "Query did not match any predefined routes."
+        else:
+            pass
+        return query
 
 
 

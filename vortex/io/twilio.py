@@ -21,9 +21,7 @@ load_dotenv()
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
 auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 client = Client(account_sid, auth_token)
-twilio_number = os.environ.get("TWILIO_NUMBER") or "+19853323941"
-
-vortex_session = VortexSession()
+twilio_number = "+19853323941" # os.environ.get("TWILIO_NUMBER") or 
 
 
 def send_message(to_number, body_text):
@@ -45,16 +43,17 @@ async def handle_wapp_message(
     # raw_data = await request.form()
     # form_data = wapp.TwilioRequest(**raw_data)
     # whatsapp_number = form_data.phone_number
+    vortex_session = VortexSession(db)
     form_data = await request.form()
     whatsapp_number = form_data["From"].split("whatsapp:")[-1]
     print(f"Sending the LangChain response to this number: {whatsapp_number}")
-    agent = vortex_session.get_or_create_agent(whatsapp_number, db)
+    agent = vortex_session.get_or_create_agent(whatsapp_number)
     # Get the generated text from the LangChain agent
     langchain_response = agent.get_response(f"user_id: {whatsapp_number}, user_request: {Body}")
     # Store the conversation in the database
     try:
-        vortex_session.store_message(whatsapp_number, Body, langchain_response, db)
-        vortex_session.store_chat_history(whatsapp_number, agent.chat_history, db)
+        vortex_session.store_message(user_id = whatsapp_number, body = Body, response = langchain_response)
+        vortex_session.store_chat_history(user_id = whatsapp_number, agent_history = agent.chat_history)
     except SQLAlchemyError as e:
         db.rollback()
         print(f"Error storing conversation in database: {e}")

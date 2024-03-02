@@ -1,5 +1,6 @@
 # %%
 import os
+from contextlib import contextmanager
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
@@ -31,6 +32,17 @@ def get_db():
     """
     try:
         db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+
+@contextmanager
+def get_db_context():
+    """
+    Context manager wrapper for the get_db generator.
+    """
+    try:
+        db = next(get_db())  # Get the session from the generator
         yield db
     finally:
         db.close()
