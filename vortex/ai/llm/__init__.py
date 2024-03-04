@@ -3,8 +3,11 @@
 import os
 from typing import Any, Callable, Dict, List, Optional, Union
 
+# from langchain_experimental.llms.ollama_functions import OllamaFunctions
 # from openai import OpenAI
 from langchain_openai import ChatOpenAI, OpenAI
+
+# from langchain_together import Together
 from pydantic import BaseModel
 
 
@@ -50,7 +53,7 @@ class LLM(BaseModel):
         ):  # Assuming TogetherAI is a typo or not implemented
             self.messages.append({"role": "user", "content": user_content})
             response = self.llm.chat.completions.create(
-                model=os.environ.get("OPENAI_MODEL_NAME", "gpt-3.5-turbo"),
+                model=os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo-0125"),
                 messages=self.messages,
                 # temperature=self.temperature,
                 # max_tokens=self.max_tokens,
@@ -66,20 +69,32 @@ class LLMFactory:
         "ChatOpenAI": lambda **kwargs: ChatOpenAI(
             temperature=kwargs.get("temperature", 0.7),
             model_name=kwargs.get(
-                "model", os.getenv("OPENAI_MODEL_NAME", "gpt-3.5-turbo")
+                "model", os.getenv("OPENAI_MODEL", "gpt-3.5-turbo-0125")
             ),
         ),
         "OpenAI": lambda **kwargs: OpenAI(
             api_key=kwargs.get("openai_api_key", os.environ.get("OPENAI_API_KEY")),
-            # base_url=kwargs.get("openai_api_base", os.getenv("OPENAI_API_BASE_URL", "https://api.openai.com")),
         ),
-        "TogetherAI": lambda **kwargs: OpenAI(
-            # model_name=kwargs.get("model", os.getenv("OPENAI_API_KEY", 'gpt-3.5-turbo')),
-            api_key=kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
-            base_url=kwargs.get(
-                "openai_api_base", os.getenv("OPENAI_API_BASE_URL", None)
-            ),
-        ),
+        # "OllamaFunctions": lambda **kwargs: OllamaFunctions(
+        #     model = kwargs.get("model", os.getenv("OLLAMA_MODEL", "gemma:2b")),
+        # ),
+        # "ChatTogetherAI": lambda **kwargs: ChatOpenAI(
+        #     temperature=kwargs.get("temperature", 0.7),
+        #     model_name=kwargs.get("model", os.getenv("TOGETHERAI_MODEL_NAME", "mistralai/Mixtral-8x7B-Instruct-v0.1")),
+        #     openai_api_key = kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
+        #     openai_api_base = kwargs.get("openai_api_base", os.getenv("OPENAI_API_BASE_URL", "https://api.together.xyz/v1")),
+        # ),
+        # "LangchainTogether": lambda **kwargs: Together(
+        #     model = kwargs.get("model", os.getenv("TOGETHERAI_MODEL_NAME", "mistralai/Mixtral-8x7B-Instruct-v0.1")),
+        #     together_api_key = kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
+        # ),
+        # "TogetherAI": lambda **kwargs: OpenAI(
+        #     # model_name=kwargs.get("model", os.getenv("OPENAI_API_KEY", 'gpt-3.5-turbo')),
+        #     api_key=kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
+        #     base_url=kwargs.get(
+        #         "openai_api_base", os.getenv("OPENAI_API_BASE_URL", None)
+        #     ),
+        # ),
     }
 
     @staticmethod
@@ -99,19 +114,3 @@ class LLMFactory:
         if provider not in LLMFactory.provider_map:
             raise NotImplementedError(f"LLM provider '{provider}' not implemented.")
         return LLMFactory.provider_map[provider](**kwargs)
-
-
-# %%
-
-
-# import cohere
-# co = cohere.Client('c42TJdTqSAxP1Q3xZylQQq9xRnNlAg14AgSEbR2C') # This is your trial API key
-# response = co.summarize(
-#   text='{text}',
-#   length='auto',
-#   format='auto',
-#   model='command',
-#   additional_command='',
-#   temperature=0.3,
-# )
-# print('Summary:', response.summary)

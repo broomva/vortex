@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI, Form, Request
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
-from vortex.api.data_models import get_db
+from vortex.datamodels import get_db
 from vortex.io.twilio import handle_wapp_message
 
 load_dotenv()
@@ -18,10 +18,12 @@ def hello_world():
 
 @app.get("/")
 async def index():
-    return {"msg": "Vortex is Running!"}
+    return {"message": "Vortex is Running!"}
 
 
 @app.post("/message")
 async def reply(request: Request, Body: str = Form(), db: Session = Depends(get_db)):
+    print(Body)
+    print(request)
     await handle_wapp_message(request, Body, db)
     return ""

@@ -60,7 +60,7 @@ jobs:
             done
           ' sh {} +
         fi
-    - name: Auto Lint with black, pylint
+    - name: Auto Lint with black
       run: |
         black .
         black --diff --check $(git ls-files '*.py')
