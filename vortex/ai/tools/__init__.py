@@ -1,6 +1,6 @@
 # %%
 from dotenv import load_dotenv
-from langchain.agents import Tool, load_tools, tool
+from langchain.agents import Tool, tool
 from langchain_community.tools import WikipediaQueryRun
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_community.utilities import WikipediaAPIWrapper
@@ -39,7 +39,6 @@ serper_api_search_tool = Tool(
     description="Useful for when you need to answer questions about current events, data. You should ask targeted questions. Prefer Tavily seach tool over this one",
 )
 
-
 scrape_with_bs4_tool = Tool(
     name="scrape_website_with_beautifulsoup",
     func=scrape_website,
@@ -51,7 +50,6 @@ scrape_with_selenuim_tool = Tool(
     func=scrape_website_selenium,
     description="Useful when you need to get data from a website url and the regular Scrape Website method is not working correctly; DO NOT make up any url, the url should only be from the search results. Prefer Tavily seach tool over this one unless explicitly asked to perform a scrapping task",
 )
-
 
 python_repl = PythonREPL()
 

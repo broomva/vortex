@@ -4,20 +4,19 @@ import os
 import pickle
 import weakref
 from datetime import datetime
+from tempfile import TemporaryDirectory
 from typing import Dict
 
-from langchain.agents import AgentExecutor
+from langchain.agents import AgentExecutor, load_tools
 from langchain.agents.format_scratchpad.openai_tools import \
     format_to_openai_tool_messages
+# from langchain.agents.output_parsers.openai_functions import OpenAIFunctionsAgentOutputParser
 from langchain.agents.output_parsers.openai_tools import \
     OpenAIToolsAgentOutputParser
-from langchain.prompts import MessagesPlaceholder
 from langchain.sql_database import SQLDatabase
-from langchain_community.agent_toolkits import (SQLDatabaseToolkit,
-                                                create_sql_agent)
+from langchain_community.agent_toolkits import (FileManagementToolkit,
+                                                SQLDatabaseToolkit)
 from langchain_core.messages import AIMessage, HumanMessage
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from pydantic import BaseModel
 from sqlalchemy.dialects.postgresql import insert
 
 from vortex.ai.llm import LLM
@@ -51,15 +50,17 @@ class VortexAgent:
         self,
         llm: LLM = LLM().llm,
         tools: list = vortex_tools,
-        hub_prompt: str = "hwchase17/openai-tools-agent",
+        # hub_prompt: str = "hwchase17/openai-tools-agent",
         agent_type="vortex_wapp_tools_agent",
         context: list = [],  # represents the chat history, can be pulled from a db
+        user_id: str = None,
     ):
         self.llm: LLM = llm
         self.tools: list = tools
-        self.hub_prompt: str = hub_prompt
+        # self.hub_prompt: str = hub_prompt
         self.agent_type: str = agent_type
         self.chat_history: list = context
+        self.user_id: str = user_id
 
         # self.prompt = vortex_prompt
 
@@ -68,8 +69,20 @@ class VortexAgent:
         self.context = self.toolkit.get_context()
         self.prompt = vortex_prompt.partial(**self.context)
         self.sql_tools = self.toolkit.get_tools()
-
-        self.llm_with_tools = self.llm.bind_tools(self.tools + self.sql_tools)
+        self.working_directory = TemporaryDirectory()
+        self.file_system_tools = FileManagementToolkit(root_dir=str(self.working_directory.name)).get_tools()
+        self.parser = OpenAIToolsAgentOutputParser()
+        self.bare_tools = load_tools(
+            [
+                "llm-math",
+                # "human",
+                # "wolfram-alpha"
+            ],
+            llm=self.llm,
+        )
+        self.agent_tools = self.tools + self.sql_tools + self.bare_tools + self.file_system_tools
+        self.llm_with_tools = self.llm.bind_tools(self.agent_tools)
+        # self.llm_with_functions = self.llm.bind_functions(self.tools + self.sql_tools)
         self.agent = (
             {
                 "input": lambda x: x["input"],
@@ -80,10 +93,10 @@ class VortexAgent:
             }
             | self.prompt
             | self.llm_with_tools
-            | OpenAIToolsAgentOutputParser()
+            | self.parser
         )
         self.agent_executor = AgentExecutor(
-            agent=self.agent, tools=self.tools + self.sql_tools, verbose=True
+            agent=self.agent, tools=self.agent_tools, verbose=True
         )
 
     def get_response(self, user_content: str):
@@ -97,7 +110,7 @@ class VortexAgent:
             str: The response from the agent.
 
         """
-        routed_content = semantic_layer(user_content)
+        routed_content = semantic_layer(query=user_content, user_id=self.user_id)
         response = self.agent_executor.invoke(
             {"input": routed_content, "chat_history": self.chat_history}
         )
@@ -142,10 +155,10 @@ class VortexSession:
             print(f"Using existing agent {agent}")
         elif agent is None and chat_history:
             print(f"Using reloaded agent with history {chat_history}")
-            agent = VortexAgent(context=chat_history)  # Initialize with chat history
+            agent = VortexAgent(context=chat_history, user_id=user_id)  # Initialize with chat history
         elif agent is None and not chat_history:
             print("Using a new agent")
-            agent = VortexAgent()  # Initialize without chat history
+            agent = VortexAgent(user_id=user_id)  # Initialize without chat history
 
         self.agents[user_id] = agent
         return agent
