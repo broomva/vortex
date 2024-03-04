@@ -8,14 +8,14 @@ from tempfile import TemporaryDirectory
 from typing import Dict
 
 from langchain.agents import AgentExecutor, load_tools
-from langchain.agents.format_scratchpad.openai_tools import (
-    format_to_openai_tool_messages,
-)
-
+from langchain.agents.format_scratchpad.openai_tools import \
+    format_to_openai_tool_messages
 # from langchain.agents.output_parsers.openai_functions import OpenAIFunctionsAgentOutputParser
-from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
+from langchain.agents.output_parsers.openai_tools import \
+    OpenAIToolsAgentOutputParser
 from langchain.sql_database import SQLDatabase
-from langchain_community.agent_toolkits import FileManagementToolkit, SQLDatabaseToolkit
+from langchain_community.agent_toolkits import (FileManagementToolkit,
+                                                SQLDatabaseToolkit)
 from langchain_core.messages import AIMessage, HumanMessage
 from sqlalchemy.dialects.postgresql import insert
 
@@ -83,7 +83,7 @@ class VortexAgent:
             llm=self.llm,
         )
         self.agent_tools = (
-            self.tools + self.sql_tools + self.bare_tools + self.file_system_tools
+            self.tools + self.bare_tools #+ self.sql_tools + self.file_system_tools
         )
         self.llm_with_tools = self.llm.bind_tools(self.agent_tools)
         # self.llm_with_functions = self.llm.bind_functions(self.tools + self.sql_tools)
