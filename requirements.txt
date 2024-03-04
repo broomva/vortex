@@ -1,3 +1,4 @@
+mlflow
 pydantic
 python-dotenv
 typing-extensions
@@ -14,14 +15,9 @@ dagster-webserver
 langchainhub
 selenium
 html2text
-chainlit
-# faiss-cpu
 chromadb
-tiktoken
 pymupdf
-duckduckgo-search
 wikipedia
-mlflow
 sendgrid
 fastapi
 uvicorn
@@ -29,4 +25,8 @@ twilio
 python-decouple
 python-multipart
 pyngrok
-langchain_experimental
+langchain-experimental
+langchain-community
+langchain-together
+semantic-router
+numexpr
