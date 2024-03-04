@@ -40,7 +40,7 @@ def send_message(to_number, body_text):
 
 def send_message_in_parts(whatsapp_number, text, max_length=1600):
     """
-    Send the message in parts, ensuring each part is split at a punctuation mark or whitespace 
+    Send the message in parts, ensuring each part is split at a punctuation mark or whitespace
     and below the threshold, using regex for optimal splitting.
 
     Parameters:
@@ -49,8 +49,8 @@ def send_message_in_parts(whatsapp_number, text, max_length=1600):
     - max_length: Maximum length of each message part. Defaults to 1600.
     """
     # Pattern to find punctuation followed by a space or just a space, to consider as split points
-    pattern = re.compile(r'(\.|\?|!|;|:)\s+|\s')
-    
+    pattern = re.compile(r"(\.|\?|!|;|:)\s+|\s")
+
     parts = []
     start = 0
     while start < len(text):
@@ -58,21 +58,21 @@ def send_message_in_parts(whatsapp_number, text, max_length=1600):
         if len(text) - start <= max_length:
             parts.append(text[start:])
             break
-        
+
         # Find all possible split positions within the next chunk of max_length characters
-        chunk = text[start:start+max_length]
+        chunk = text[start : start + max_length]
         split_positions = [match.start() for match in pattern.finditer(chunk)]
-        
+
         # If no suitable split position found, enforce split at max_length
         if not split_positions:
             split_pos = max_length
         else:
             # Prefer the last possible split position to maximize chunk size
             split_pos = split_positions[-1] + 1
-        
-        parts.append(text[start:start+split_pos])
+
+        parts.append(text[start : start + split_pos])
         start += split_pos
-    
+
     # Send each part
     for part in parts:
         send_message(whatsapp_number, part)
@@ -98,12 +98,16 @@ async def handle_wapp_message(
     langchain_response = agent.get_response(user_content=Body)
     # Store the conversation in the database
     try:
-        vortex_session.store_message(user_id = whatsapp_number, body = Body, response = langchain_response)
-        vortex_session.store_chat_history(user_id = whatsapp_number, agent_history = agent.chat_history)
+        vortex_session.store_message(
+            user_id=whatsapp_number, body=Body, response=langchain_response
+        )
+        vortex_session.store_chat_history(
+            user_id=whatsapp_number, agent_history=agent.chat_history
+        )
     except SQLAlchemyError as e:
         db.rollback()
         print(f"Error storing conversation in database: {e}")
-    
+
     # Check if the response is larger that 1600, if so, split it into multiple messages and send them
     if len(langchain_response) > 1600:
         send_message_in_parts(whatsapp_number, langchain_response)

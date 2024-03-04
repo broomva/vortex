@@ -12,6 +12,7 @@ engine = create_engine(os.environ.get("SQLALCHEMY_URL"))
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
+
 def get_db():
     """
     Returns a database session.
@@ -25,6 +26,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @contextmanager
 def get_db_context():

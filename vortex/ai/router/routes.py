@@ -114,7 +114,7 @@ ROUTES_CONFIGURATIONS = [
             "how do you find the integral of x^2?",
             "what is the Pythagorean theorem?",
             "explain the Fibonacci sequence",
-            "what is the difference between permutations and combinations?"
+            "what is the difference between permutations and combinations?",
         ],
         strategy=MathResponse,
     ),
@@ -128,7 +128,7 @@ ROUTES_CONFIGURATIONS = [
             "what are the basics of genetics?",
             "explain the theory of evolution",
             "what are the different types of cells?",
-            "how do vaccines work?"
+            "how do vaccines work?",
         ],
         strategy=BiologyResponse,
     ),
@@ -144,7 +144,7 @@ ROUTES_CONFIGURATIONS = [
             "how should we address political polarization?",
             "what can be done about political corruption?",
             "how do political ideologies impact society?",
-            "is there a solution to political deadlock?"
+            "is there a solution to political deadlock?",
         ],
         strategy=PoliticsResponse,
     ),
@@ -157,7 +157,7 @@ ROUTES_CONFIGURATIONS = [
             "how do you join two tables?",
             "what is the difference between INNER JOIN and OUTER JOIN?",
             "explain the use of GROUP BY clause",
-            "how can I use SQL to filter data?"
+            "how can I use SQL to filter data?",
         ],
         strategy=SQLResponse,
     ),
@@ -170,7 +170,7 @@ ROUTES_CONFIGURATIONS = [
             "what year is it?",
             "what is the date today?",
             "how many days until next month?",
-            "can you give me the time in London?"
+            "can you give me the time in London?",
         ],
         strategy=TimeNowResponse,
     ),
@@ -183,9 +183,9 @@ ROUTES_CONFIGURATIONS = [
             "What are the latest trends in cybersecurity?",
             "What is the future of cloud computing?",
             "How do I protect my privacy online?",
-            "What are the basics of coding for beginners?"
+            "What are the basics of coding for beginners?",
         ],
-        strategy=TechnologyResponse
+        strategy=TechnologyResponse,
     ),
     RouteConfig(
         name="health_fitness",
@@ -196,9 +196,9 @@ ROUTES_CONFIGURATIONS = [
             "Can you recommend home exercises for beginners?",
             "How do I manage stress through diet and exercise?",
             "What are the health risks of sitting all day?",
-            "What supplements should I consider for general health?"
+            "What supplements should I consider for general health?",
         ],
-        strategy=HealthFitnessResponse
+        strategy=HealthFitnessResponse,
     ),
     RouteConfig(
         name="entertainment",
@@ -209,9 +209,9 @@ ROUTES_CONFIGURATIONS = [
             "Best video games for stress relief?",
             "What are the top streaming shows right now?",
             "Can you suggest a playlist for studying?",
-            "What board games are fun for two players?"
+            "What board games are fun for two players?",
         ],
-        strategy=EntertainmentResponse
+        strategy=EntertainmentResponse,
     ),
     RouteConfig(
         name="finance_economics",
@@ -222,9 +222,9 @@ ROUTES_CONFIGURATIONS = [
             "What are the best budgeting apps available?",
             "How can I improve my credit score?",
             "What are the basics of personal financial planning?",
-            "How do interest rates affect the economy?"
+            "How do interest rates affect the economy?",
         ],
-        strategy=FinanceEconomicsResponse
+        strategy=FinanceEconomicsResponse,
     ),
     RouteConfig(
         name="environmental_science",
@@ -235,9 +235,9 @@ ROUTES_CONFIGURATIONS = [
             "What are renewable energy sources?",
             "How can urban areas contribute to sustainability?",
             "What is biodiversity and why is it important?",
-            "Are electric cars really better for the environment?"
+            "Are electric cars really better for the environment?",
         ],
-        strategy=EnvironmentalScienceResponse
+        strategy=EnvironmentalScienceResponse,
     ),
     RouteConfig(
         name="history_culture",
@@ -248,9 +248,9 @@ ROUTES_CONFIGURATIONS = [
             "How did ancient Egyptians build the pyramids?",
             "What are key moments in the civil rights movement?",
             "How do cultural differences affect global business?",
-            "What are some traditional cuisines from around the world?"
+            "What are some traditional cuisines from around the world?",
         ],
-        strategy=HistoryCultureResponse
+        strategy=HistoryCultureResponse,
     ),
     RouteConfig(
         name="psychology_mental_health",
@@ -261,8 +261,8 @@ ROUTES_CONFIGURATIONS = [
             "What are the signs of burnout and how can I prevent it?",
             "How does exercise benefit mental health?",
             "What are the benefits of mindfulness meditation?",
-            "How can I build resilience in tough times?"
+            "How can I build resilience in tough times?",
         ],
-        strategy=PsychologyMentalHealthResponse
-    )
+        strategy=PsychologyMentalHealthResponse,
+    ),
 ]

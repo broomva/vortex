@@ -6,6 +6,7 @@ from typing import Any, Callable, Dict, List, Optional, Union
 # from langchain_experimental.llms.ollama_functions import OllamaFunctions
 # from openai import OpenAI
 from langchain_openai import ChatOpenAI, OpenAI
+
 # from langchain_together import Together
 from pydantic import BaseModel
 
@@ -86,7 +87,6 @@ class LLMFactory:
         # "LangchainTogether": lambda **kwargs: Together(
         #     model = kwargs.get("model", os.getenv("TOGETHERAI_MODEL_NAME", "mistralai/Mixtral-8x7B-Instruct-v0.1")),
         #     together_api_key = kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
-            
         # ),
         # "TogetherAI": lambda **kwargs: OpenAI(
         #     # model_name=kwargs.get("model", os.getenv("OPENAI_API_KEY", 'gpt-3.5-turbo')),
@@ -96,7 +96,6 @@ class LLMFactory:
         #     ),
         # ),
     }
-
 
     @staticmethod
     def create_llm(provider: str, **kwargs: Any) -> Union[ChatOpenAI, OpenAI]:
