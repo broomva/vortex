@@ -4,21 +4,11 @@ from contextlib import contextmanager
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.engine import URL
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
-url = URL.create(
-    drivername="postgresql",
-    username=os.environ.get("POSTGRES_USERNAME"),  # config("DB_USER"),
-    password=os.environ.get("POSTGRES_PASSWORD"),  # config("DB_PASSWORD"),
-    host=os.environ.get("POSTGRES_HOST"),
-    database=os.environ.get("POSTGRES_DATABASE"),
-    port=os.environ.get("POSTGRES_PORT"),
-)
-
-engine = create_engine(url)
+engine = create_engine(os.environ.get("SQLALCHEMY_URL"))
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
