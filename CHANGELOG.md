@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.2.2](https://github.com/Broomva/vortex/compare/v0.2.1...v0.2.2) (2024-03-04)
+
+
+### Bug Fixes
+
+* added vercel config file ([821ac7a](https://github.com/Broomva/vortex/commit/821ac7a897e3590641b5880a0389db63e25cb550))
+* corrected links ([5ce2c38](https://github.com/Broomva/vortex/commit/5ce2c384ef909aa1b5d2b190ab41f3cb7afe7ed7))
+* minor update to prompt ([d13b5b5](https://github.com/Broomva/vortex/commit/d13b5b5603bd9cd825b3ea7ce13411c224427012))
+* removed vercel.json file ([f7deb8b](https://github.com/Broomva/vortex/commit/f7deb8b9d7825936a740a788f1ae1b7f4a7cf9a4))
+* udpated datamodels ([c713be9](https://github.com/Broomva/vortex/commit/c713be9eefa88c59dccd9b56768a77b799fc0d93))
+* updated agent to include sql agent ([b7bcf5f](https://github.com/Broomva/vortex/commit/b7bcf5fbb7f3aea4e49823c7973cf2a6121e3994))
+* updated dependencies to correctly use semantic-router. Updated roter defintion to use strategy and factory pattern ([48f2039](https://github.com/Broomva/vortex/commit/48f2039ff523fb2eccf81c8a000ec7ae5038384a))
+* updated llm module to be a package, added semantic router module, updated ai agents and prompts modules ([456748a](https://github.com/Broomva/vortex/commit/456748a5d94983f5a7d15d6876d54dec7f03df28))
+* updated poetry.lock and pyproject.toml ([acdcfcd](https://github.com/Broomva/vortex/commit/acdcfcdc4054e0c8c1cc4d826eeaf5e76de9e800))
+* updated prompt and .env.example template ([f577c51](https://github.com/Broomva/vortex/commit/f577c51b6453fc62382bae3e4e79a6f4036783ab))
+* updated prompts ([3bf4167](https://github.com/Broomva/vortex/commit/3bf4167230aebd75c2a5ab4ad8718e0af2270508))
+* updated router and routes, added validation for SQL tool via route ([8b37594](https://github.com/Broomva/vortex/commit/8b3759483861d0f2fc9470433fd92c952529bbc1))
+* updated routing and session handling for sqlalchemy. Updated logo ([ba28491](https://github.com/Broomva/vortex/commit/ba28491aa702488fa8be3b34a8ef3cfaa6bda821))
+* updated to use sqlalchemy env var ([b782c94](https://github.com/Broomva/vortex/commit/b782c94d581316840a62802bc20c3043378478ac))
+* updated twilio number ([4fe0f00](https://github.com/Broomva/vortex/commit/4fe0f00db7c8e67294276cf46c0d47f06c3c484e))
+
 ## [0.2.1](https://github.com/Broomva/vortex/compare/v0.2.0...v0.2.1) (2024-02-09)
 
 
