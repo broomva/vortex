@@ -12,7 +12,9 @@ class OpenAIResource(ConfigurableResource):
     api_key: Optional[str] = (
         None or EnvVar("TOGETHER_API_KEY") or EnvVar("OPENAI_API_KEY")
     )
-    base_url: Optional[str] = EnvVar("TOGETHER_API_BASE_URL") or EnvVar("OPENAI_API_BASE_URL")
+    base_url: Optional[str] = EnvVar("TOGETHER_API_BASE_URL") or EnvVar(
+        "OPENAI_API_BASE_URL"
+    )
     # client: Optional[OpenAI] = None
     model: Optional[str] = (
         EnvVar("TOGETHERAI_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
