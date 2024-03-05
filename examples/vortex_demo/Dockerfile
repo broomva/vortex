@@ -9,12 +9,6 @@ COPY . /opt/dagster/app/
 
 ENV DAGSTER_HOME=/opt/dagster/dagster_home/
 
-# Copy dagster instance YAML to $DAGSTER_HOME
-COPY dagster.yaml /opt/dagster/dagster_home/
-
-# Copy the entrypoint script into the image
-COPY entrypoint.sh /opt/dagster/app/
-
 WORKDIR /opt/dagster/app
 
 EXPOSE 3000
