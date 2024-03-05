@@ -13,5 +13,7 @@ WORKDIR /opt/dagster/app
 
 EXPOSE 3000
 
+EXPOSE 4266
+
 # Use the entrypoint script as the entrypoint
 ENTRYPOINT ["./entrypoint.sh"]
