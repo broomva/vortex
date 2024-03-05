@@ -4,10 +4,13 @@ import os
 from typing import Any, Callable, Dict, List, Optional, Union
 
 # from langchain_experimental.llms.ollama_functions import OllamaFunctions
+# from langchain_community.chat_models import ChatOllama
+# from langchain_mistralai import ChatMistralAI
 # from openai import OpenAI
-from langchain_openai import ChatOpenAI, OpenAI
-
 # from langchain_together import Together
+
+from langchain_openai import ChatOpenAI, OpenAI
+from langchain_fireworks import ChatFireworks
 from pydantic import BaseModel
 
 
@@ -72,17 +75,29 @@ class LLMFactory:
                 "model", os.getenv("OPENAI_MODEL", "gpt-3.5-turbo-0125")
             ),
         ),
-        "OpenAI": lambda **kwargs: OpenAI(
-            api_key=kwargs.get("openai_api_key", os.environ.get("OPENAI_API_KEY")),
+        "ChatTogetherAI": lambda **kwargs: ChatOpenAI(
+            temperature=kwargs.get("temperature", 0.7),
+            model_name=kwargs.get("model", os.getenv("TOGETHER_MODEL_NAME", "mistralai/Mixtral-8x7B-Instruct-v0.1")),
+            openai_api_key = kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
+            openai_api_base = kwargs.get("openai_api_base", os.getenv("OPENAI_API_BASE_URL", "https://api.together.xyz/v1")),
         ),
-        # "OllamaFunctions": lambda **kwargs: OllamaFunctions(
-        #     model = kwargs.get("model", os.getenv("OLLAMA_MODEL", "gemma:2b")),
-        # ),
-        # "ChatTogetherAI": lambda **kwargs: ChatOpenAI(
+        "ChatFireworksAI": lambda **kwargs: ChatFireworks(
+            fireworks_api_key = kwargs.get("fireworks_api_key", os.environ.get("FIREWORKS_API_KEY")),
+            model=kwargs.get("model", os.getenv("FIREWORKS_MODEL_NAME", "accounts/fireworks/models/mixtral-8x7b-instruct")), 
+            temperature=kwargs.get("temperature", 0.7),
+        ),
+        
+        # "ChatMistralAI": lambda **kwargs: ChatMistralAI(
+        #     mistral_api_key = kwargs.get("mistral_api_key", os.environ.get("MISTRAL_API_KEY")),
+        #     model = kwargs.get("model", os.getenv("MISTRAL_MODEL_NAME", "mistral-large-latest")),
         #     temperature=kwargs.get("temperature", 0.7),
-        #     model_name=kwargs.get("model", os.getenv("TOGETHERAI_MODEL_NAME", "mistralai/Mixtral-8x7B-Instruct-v0.1")),
-        #     openai_api_key = kwargs.get("openai_api_key", os.environ.get("TOGETHER_API_KEY")),
-        #     openai_api_base = kwargs.get("openai_api_base", os.getenv("OPENAI_API_BASE_URL", "https://api.together.xyz/v1")),
+        #     kwargs = {'stream': False}
+        # ),
+        # "OpenAI": lambda **kwargs: OpenAI(
+        #     api_key=kwargs.get("openai_api_key", os.environ.get("OPENAI_API_KEY")),
+        # ),
+        # "Ollama": lambda **kwargs: ChatOllama(
+        #     model = kwargs.get("model", os.getenv("OLLAMA_MODEL", "gemma:2b")),
         # ),
         # "LangchainTogether": lambda **kwargs: Together(
         #     model = kwargs.get("model", os.getenv("TOGETHERAI_MODEL_NAME", "mistralai/Mixtral-8x7B-Instruct-v0.1")),

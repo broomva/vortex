@@ -11,8 +11,6 @@ from langchain.agents import AgentExecutor, load_tools
 from langchain.agents.format_scratchpad.openai_tools import (
     format_to_openai_tool_messages,
 )
-
-# from langchain.agents.output_parsers.openai_functions import OpenAIFunctionsAgentOutputParser
 from langchain.agents.output_parsers.openai_tools import OpenAIToolsAgentOutputParser
 from langchain.sql_database import SQLDatabase
 from langchain_community.agent_toolkits import FileManagementToolkit, SQLDatabaseToolkit
@@ -40,6 +38,8 @@ class VortexAgent:
         prompt: The chat prompt template for the agent.
         agent: The agent pipeline.
         agent_executor: The executor for the agent.
+        user_id: The unique identifier for the user.
+        verbose: A boolean indicating whether to print verbose output.
 
     Methods:
         get_response: Gets the response from the agent given user input.
@@ -50,19 +50,19 @@ class VortexAgent:
         self,
         llm: LLM = LLM().llm,
         tools: list = vortex_tools,
-        # hub_prompt: str = "hwchase17/openai-tools-agent",
+        hub_prompt: str = "broomva/vortex",
         agent_type="vortex_wapp_tools_agent",
         context: list = [],  # represents the chat history, can be pulled from a db
         user_id: str = None,
+        verbose: bool = False,
     ):
         self.llm: LLM = llm
         self.tools: list = tools
-        # self.hub_prompt: str = hub_prompt
+        self.hub_prompt: str = hub_prompt
         self.agent_type: str = agent_type
         self.chat_history: list = context
         self.user_id: str = user_id
-
-        # self.prompt = vortex_prompt
+        self.verbose: bool = verbose
 
         self.db = SQLDatabase.from_uri(os.environ.get("SQLALCHEMY_URL"))
         self.toolkit = SQLDatabaseToolkit(db=self.db, llm=self.llm)
@@ -86,7 +86,6 @@ class VortexAgent:
             self.tools + self.bare_tools  # + self.sql_tools + self.file_system_tools
         )
         self.llm_with_tools = self.llm.bind_tools(self.agent_tools)
-        # self.llm_with_functions = self.llm.bind_functions(self.tools + self.sql_tools)
         self.agent = (
             {
                 "input": lambda x: x["input"],
@@ -100,7 +99,7 @@ class VortexAgent:
             | self.parser
         )
         self.agent_executor = AgentExecutor(
-            agent=self.agent, tools=self.agent_tools, verbose=True
+            agent=self.agent, tools=self.agent_tools, verbose=self.verbose
         )
 
     def get_response(self, user_content: str):
@@ -137,13 +136,18 @@ class VortexSession:
         self.session_factory = session_factory
         self.agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
-    def get_or_create_agent(self, user_id: str) -> "VortexAgent":
+    def get_or_create_agent(self, user_id: str, provided_agent: VortexAgent = None) -> VortexAgent:
         """
         Retrieves or creates a VortexAgent for a given user_id.
 
         :param user_id: The unique identifier for the user.
         :return: An instance of VortexAgent.
         """
+        if provided_agent is not None:
+            provided_agent.user_id = user_id
+            self.agents[user_id] = provided_agent
+            return provided_agent
+        
         agent = self.agents.get(user_id)
         chat_history = []
 
@@ -152,8 +156,6 @@ class VortexSession:
             chat_history = self.get_chat_history(user_id)
         except Exception as e:
             print(f"Error getting chat history for {user_id}: {e}")
-
-        # print(f"Chat history: {chat_history}")
 
         if agent is not None and chat_history:
             print(f"Using existing agent {agent}")
