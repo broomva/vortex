@@ -1,8 +1,8 @@
-load_from:
-  - python_file: dags/web_rag_agent.py
-
 # load_from:
-#   - grpc_server:
-#       host: localhost
-#       port: 4266
-#       location_name: "vortex_demo"
+#   - python_file: dags/web_rag_agent.py
+
+load_from:
+  - grpc_server:
+      host: vortex-flows-grpc.railway.internal
+      port: 4266
+      location_name: "vortex_demo"
