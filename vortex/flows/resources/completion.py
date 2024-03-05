@@ -17,7 +17,7 @@ class OpenAIResource(ConfigurableResource):
     )
     # client: Optional[OpenAI] = None
     model: Optional[str] = (
-        EnvVar("TOGETHERAI_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
+        EnvVar("TOGETHER_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
     )
     # respone_model: Optional[BaseModel] = None
     temperature: Optional[float] = 0.8
