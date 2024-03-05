@@ -136,7 +136,9 @@ class VortexSession:
         self.session_factory = session_factory
         self.agents: Dict[str, weakref.ref] = weakref.WeakValueDictionary()
 
-    def get_or_create_agent(self, user_id: str, provided_agent: VortexAgent = None) -> VortexAgent:
+    def get_or_create_agent(
+        self, user_id: str, provided_agent: VortexAgent = None
+    ) -> VortexAgent:
         """
         Retrieves or creates a VortexAgent for a given user_id.
 
@@ -147,7 +149,7 @@ class VortexSession:
             provided_agent.user_id = user_id
             self.agents[user_id] = provided_agent
             return provided_agent
-        
+
         agent = self.agents.get(user_id)
         chat_history = []
 

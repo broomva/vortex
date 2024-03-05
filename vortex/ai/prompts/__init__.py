@@ -1,4 +1,4 @@
-#%%
+# %%
 from typing import cast
 
 from langchain_core.messages import AIMessage, SystemMessage
@@ -76,6 +76,6 @@ VORTEX_DEFAULT_PROMPT = [
 
 vortex_prompt = ChatPromptTemplate.from_messages(VORTEX_DEFAULT_PROMPT)
 
-#%%
+# %%
 # from langchain import hub
 # hub.push("broomva/vortex", vortex_prompt, new_repo_description="Vortex AI Assistant Prompt")
