@@ -1,2 +1,2 @@
 load_from:
-  - python_file: __init__.py
+  - python_file: dags/web_rag_agent.py
