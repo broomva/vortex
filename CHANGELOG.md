@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.3](https://github.com/Broomva/vortex/compare/v0.2.2...v0.2.3) (2024-03-05)
+
+
+### Bug Fixes
+
+* added fireworks ai as LLM provider ([ff66301](https://github.com/Broomva/vortex/commit/ff66301cc556829d4d0848fba22443b19e053c09))
+* fixed typo ([5538f37](https://github.com/Broomva/vortex/commit/5538f37a16b045bddc41c90a3124ed86c76b28f0))
+* removed dagster cloud ci/cd files ([7294656](https://github.com/Broomva/vortex/commit/729465643c63630684337fb09ca05994dabd62cf))
+* removed unneeded copy commands ([6c54fcb](https://github.com/Broomva/vortex/commit/6c54fcbabd5ea352688578d89b94c6404b9070f0))
+* temporary disable of sql tools until more robust guardrails can be implemented ([b05f9e1](https://github.com/Broomva/vortex/commit/b05f9e14be26617415000fa8f80efc60eba03de1))
+* testing manually defined gprc server ([c657986](https://github.com/Broomva/vortex/commit/c657986c2306f68ba188bae83a4cc4774627b67a))
+* updated requirements ([73d5530](https://github.com/Broomva/vortex/commit/73d55308f6bba9406cf51e5fec9e76b93726ef30))
+* updates for dagster docker deploy ([4bc134e](https://github.com/Broomva/vortex/commit/4bc134ef378ff80b602fd75f1caa31ca85f59037))
+
 ## [0.2.2](https://github.com/Broomva/vortex/compare/v0.2.1...v0.2.2) (2024-03-04)
 
 
