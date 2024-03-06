@@ -9,7 +9,8 @@ storage:
         env: VORTEX_FLOWS_PG_HOST
       db_name:
         env: VORTEX_FLOWS_PG_DB
-      port: 5432
+      port:
+        env: VORTEX_FLOWS_PG_PORT
 
 # compute_logs:
 #   module: dagster.core.storage.root

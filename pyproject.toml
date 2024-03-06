@@ -42,6 +42,7 @@ langchain-together = "^0.0.2.post1"
 numexpr = "^2.9.0"
 langchain-fireworks = "^0.1.1"
 semantic-router = "^0.0.27"
+dagster-postgres = "^0.22.8"
 
 
 
