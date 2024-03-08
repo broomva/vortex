@@ -1,23 +1,24 @@
 # %%
 from typing import Optional
-
-from dagster import ConfigurableResource, EnvVar
+from pydantic import BaseModel
+#from dagster import ConfigurableResource, os.environ.get
 from dotenv import load_dotenv
 from openai import OpenAI
+import os
 
 load_dotenv()
 
 
-class OpenAIResource(ConfigurableResource):
+class OpenAIResource(BaseModel):
     api_key: Optional[str] = (
-        None or EnvVar("TOGETHER_API_KEY") or EnvVar("OPENAI_API_KEY")
+        None or os.environ.get("TOGETHER_API_KEY") or os.environ.get("OPENAI_API_KEY")
     )
-    base_url: Optional[str] = EnvVar("TOGETHER_API_BASE_URL") or EnvVar(
+    base_url: Optional[str] = os.environ.get("TOGETHER_API_BASE_URL") or os.environ.get(
         "OPENAI_API_BASE_URL"
     )
     # client: Optional[OpenAI] = None
     model: Optional[str] = (
-        EnvVar("TOGETHER_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
+        os.environ.get("TOGETHER_MODEL_NAME") or "mistralai/Mixtral-8x7B-Instruct-v0.1"
     )
     # respone_model: Optional[BaseModel] = None
     temperature: Optional[float] = 0.8
