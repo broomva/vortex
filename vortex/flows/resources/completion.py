@@ -1,7 +1,6 @@
 # %%
 from typing import Optional
 from pydantic import BaseModel
-#from dagster import ConfigurableResource, os.environ.get
 from dotenv import load_dotenv
 from openai import OpenAI
 import os
