@@ -5,6 +5,7 @@ from vortex.flows.resources import OpenAIResource
 
 openai_resource = OpenAIResource()
 
+
 @task
 def get_article(input_url: str) -> str:
     if not input_url:
@@ -20,6 +21,7 @@ def get_article(input_url: str) -> str:
         raise e
     return response
 
+
 @task
 def summarize_article(article_text: str) -> str:
     if not article_text:
@@ -28,15 +30,17 @@ def summarize_article(article_text: str) -> str:
     response = openai_resource.get(user_query)
     return response
 
+
 @flow(log_prints=True)
 def web_rag_flow(input_url: str = "https://github.com/Broomva/vortex"):
     article_text = get_article(input_url)
     article_summary = summarize_article(article_text)
     print(article_summary)
 
+
 if __name__ == "__main__":
     web_rag_flow.deploy(
-        name="web-rag-flow", 
+        name="web-rag-flow",
         work_pool_name="broomva-worker",
         parameters={"input_url": "https://github.com/Broomva/vortex"},
     )

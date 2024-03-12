@@ -6,11 +6,12 @@ minio_block = RemoteFileSystem(
     settings={
         "key": os.environ.get("MINIO_USER", "minio"),
         "secret": os.environ.get("MINIO_PASSWORD", "minio123"),
-        "client_kwargs": {"endpoint_url": os.environ.get("MINIO_HOST","http://localhost:9001")},
+        "client_kwargs": {
+            "endpoint_url": os.environ.get("MINIO_HOST", "http://localhost:9001")
+        },
     },
 )
 minio_block.save("minio")
-
 
 
 # prefect deployment build web_rag.py:web_rag_flow --name web_rag_deployment --tag minio -sb remote-file-system/minio
