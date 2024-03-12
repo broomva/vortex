@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.4](https://github.com/Broomva/vortex/compare/v0.2.3...v0.2.4) (2024-03-12)
+
+
+### Bug Fixes
+
+* changed back to local storage ([53a7e50](https://github.com/Broomva/vortex/commit/53a7e500100f1f19d8b7b5c2b3134129b8da3a6b))
+* exposed port 4266 ([709f9fa](https://github.com/Broomva/vortex/commit/709f9fa6e530c78c8db2d79deee86caa5a3df2f0))
+* removed direct dependencies on dagster for flows resources, reordered examples ([dea04e9](https://github.com/Broomva/vortex/commit/dea04e90a9073e8d47fc9ecba49bda8b26a0d618))
+* renaming flows and including base prefect flow ([bda4d72](https://github.com/Broomva/vortex/commit/bda4d72ad1b6e57330d8ab4983dd8f8b7a847416))
+* updated dagster to use separate grpc code location server ([661c702](https://github.com/Broomva/vortex/commit/661c702fe4c8130a3e10059128ad7c289f2dcb2e))
+* updated dagster_home ([d8e6775](https://github.com/Broomva/vortex/commit/d8e6775ff7ce4c4f5442a3e58a4677bede9f3c16))
+* updated dagster.yaml to use cloud storage ([e34e334](https://github.com/Broomva/vortex/commit/e34e334270b994f72fc4b4dbe5954c659960c78a))
+* using local code location ([a466993](https://github.com/Broomva/vortex/commit/a466993c339d911e68a8ac19808fe162a2338d92))
+
 ## [0.2.3](https://github.com/Broomva/vortex/compare/v0.2.2...v0.2.3) (2024-03-05)
 
 
