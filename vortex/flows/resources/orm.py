@@ -2,12 +2,11 @@
 import contextlib
 import os
 from typing import Optional
-
-from dagster import ConfigurableResource, EnvVar
+from pydantic import BaseModel
 from sqlalchemy import create_engine, text
 
 
-class SQLAlchemyResource(ConfigurableResource):
+class SQLAlchemyResource(BaseModel):
     """
     Represents a resource for executing SQL queries using SQLAlchemy.
 
@@ -15,7 +14,7 @@ class SQLAlchemyResource(ConfigurableResource):
         url (Optional[str]): The URL of the SQLAlchemy database connection.
     """
 
-    url: Optional[str] = EnvVar("SQLALCHEMY_URL")
+    url: Optional[str] = os.environ.get("SQLALCHEMY_URL")
 
     @contextlib.contextmanager
     def connect(self):

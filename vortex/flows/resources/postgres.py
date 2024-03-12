@@ -11,31 +11,12 @@ You may not use this file except in compliance with the License.
 import contextlib
 import os
 from typing import Optional
-
+from pydantic import BaseModel
 import psycopg2
-from dagster import ConfigurableResource, EnvVar
-
-# from dagster import (
-#     AssetExecutionContext,
-#     Definitions,
-#     InitResourceContext,
-#     asset,
-#     resource,
-# )
-
-# class FancyDbResource:
-#     def __init__(self, conn_string: str) -> None:
-#         self.conn_string = conn_string
-
-#     def execute(self, query: str) -> None:
-#         ...
-
-# @resource(config_schema={"conn_string": str})
-# def fancy_db_resource(context: InitResourceContext) -> FancyDbResource:
-#     return FancyDbResource(context.resource_config["conn_string"])
 
 
-class PostgresResource(ConfigurableResource):
+
+class PostgresResource(BaseModel):
     """
     The `PostgresResource` class represents a resource for connecting to a PostgreSQL database.
     It provides methods for executing queries and fetching results from the database.
@@ -53,11 +34,11 @@ class PostgresResource(ConfigurableResource):
 
     """
 
-    database: Optional[str] = EnvVar("POSTGRES_DATABASE")
-    username: Optional[str] = EnvVar("POSTGRES_USERNAME")
-    password: Optional[str] = EnvVar("POSTGRES_PASSWORD")
-    host: Optional[str] = EnvVar("POSTGRES_HOST")
-    port: Optional[str] = EnvVar("POSTGRES_PORT")
+    database: Optional[str] = os.environ.get("POSTGRES_DATABASE")
+    username: Optional[str] = os.environ.get("POSTGRES_USERNAME")
+    password: Optional[str] = os.environ.get("POSTGRES_PASSWORD")
+    host: Optional[str] = os.environ.get("POSTGRES_HOST")
+    port: Optional[str] = os.environ.get("POSTGRES_PORT")
 
     @contextlib.contextmanager
     def connect(self):
