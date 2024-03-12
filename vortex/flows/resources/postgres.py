@@ -15,7 +15,6 @@ from pydantic import BaseModel
 import psycopg2
 
 
-
 class PostgresResource(BaseModel):
     """
     The `PostgresResource` class represents a resource for connecting to a PostgreSQL database.
